@@ -387,7 +387,7 @@
           <version>1.6.8</version>
           <extensions>true</extensions>
           <configuration>
-            <id>ossrh-snapshots-interledger</id>
+            <id>ossrh-snapshots-ripple</id>
             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
             <autoReleaseAfterClose>true</autoReleaseAfterClose>
           </configuration>
