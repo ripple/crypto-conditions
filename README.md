@@ -1,7 +1,8 @@
-# Crypto-Conditions [![GitHub issues](https://img.shields.io/github/issues-raw/hyperledger/quilt/crypto-conditions.svg)](https://github.com/hyperledger/quilt/issues?q=is%3Aissue+is%3Aopen+label%3Acrypto-conditions)
+# Crypto-Conditions [![GitHub issues](https://img.shields.io/github/issues-raw/ripple/crypto-conditions.svg)](https://github.com/ripple/crypto-conditions/issues?q=is%3Aissue+is%3Aopen)
 
 Java implementation of Crypto-Conditions (See [RFC](https://datatracker.ietf.org/doc/draft-thomas-crypto-conditions/)).
 
+* v1.0.x (and above) implements the latest RFC [draft-04](https://tools.ietf.org/html/draft-thomas-crypto-conditions-04).
 * v0.3.x-SNAPSHOT (and above) implements the latest RFC [draft-03](https://tools.ietf.org/html/draft-thomas-crypto-conditions-03).
 * v0.2.x-SNAPSHOT implements the latest RFC [draft-02](https://tools.ietf.org/html/draft-thomas-crypto-conditions-02).
 
@@ -11,7 +12,8 @@ This library uses various cryptographic functions so it relies on implementation
 
 For RSA any provider that supports **SHA256withRSA/PSS** signatures can be used. The library has been tested with BouncyCastle v1.46 but has no runtime dependancy on it.
 
-For ED25519 the library depends on [net.i2p.crypto.eddsa](https://github.com/str4d/ed25519-java). As there are no standard interfaces in the `java.security` namespace for EdDSA keys the library is included as a dependancy. Future versions will hopefully remove this dependency.
+For ED25519 the library depends on [net.i2p.crypto.eddsa](https://github.com/str4d/ed25519-java). As there are no standard interfaces in the `java.security` namespace for
+EdDSA keys, the library is included as a dependancy. Future versions will hopefully remove this dependency.
 
 ## Get it!
 
@@ -36,9 +38,9 @@ Next, add the following Maven dependency:
 <dependencies>
   ...
   <dependency>
-    <groupId>org.interledger</groupId>
+    <groupId>com.ripple.cryptoconditions</groupId>
     <artifactId>crypto-conditions</artifactId>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </dependency>
   ...
 </dependencies>
@@ -59,7 +61,7 @@ Next, import this library as a dependency, like this:
 ```
 dependencies {
     ...
-    compile group: 'org.interledger', name: 'crypto-conditions', version: '0.4.0-SNAPSHOT'
+    compile group: 'com.ripple.cryptoconditions', name: 'crypto-conditions', version: '1.0.0-SNAPSHOT'
     ...
 }
 ```
@@ -74,8 +76,8 @@ To install Maven, follow the instructions at [https://maven.apache.org/install.h
 ### Get the code
 
 ``` sh
-git clone https://github.com/hyperledger/quilt
-cd quilt/crypto-conditions
+git clone https://github.com/ripple/crypto-conditions
+cd ripple/crypto-conditions
 ```
 
 ### Build the Project
