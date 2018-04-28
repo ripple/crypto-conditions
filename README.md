@@ -111,19 +111,19 @@ $ mvn checkstyle:checkstyle
 #### PREFIX-SHA-256 Example:
 ```java
   // Create a sub-fulfillment...
-	final byte[] preimage = "My Secret Preimage".getBytes(Charset.defaultCharset());
-	PreimageSha256Fulfillment subfulfillment = PreimageSha256Fulfillment.from(preimage);
+  final byte[] preimage = "My Secret Preimage".getBytes(Charset.defaultCharset());
+  PreimageSha256Fulfillment subfulfillment = PreimageSha256Fulfillment.from(preimage);
 
-	// Narrow the subfulfillment with a prefix...
-	final String prefix = "order-1234";
-	final PrefixSha256Fulfillment fulfillment = PrefixSha256Fulfillment
-	    .from(prefix.getBytes(), 100, subfulfillment);
-	final PrefixSha256Condition condition = fulfillment.getDerivedCondition();
+  // Narrow the subfulfillment with a prefix...
+  final String prefix = "order-1234";
+  final PrefixSha256Fulfillment fulfillment = PrefixSha256Fulfillment
+      .from(prefix.getBytes(), 100, subfulfillment);
+  final PrefixSha256Condition condition = fulfillment.getDerivedCondition();
 
-	// Verify the fulfillment
-	if (fulfillment.verify(condition, new byte[0])) {
-	  System.out.println("Fulfillment is valid!");
-	}
+  // Verify the fulfillment
+  if (fulfillment.verify(condition, new byte[0])) {
+    System.out.println("Fulfillment is valid!");
+  }
 ```
 
 #### ED25519-SHA-256 Example
