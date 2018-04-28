@@ -1,4 +1,16 @@
-# Crypto-Conditions [![GitHub issues](https://img.shields.io/github/issues-raw/ripple/crypto-conditions.svg)](https://github.com/ripple/crypto-conditions/issues?q=is%3Aissue+is%3Aopen)
+# Crypto-Conditions [![join the chat][rocketchat-image]][rocketchat-url]
+[![circle-ci][circle-image]][circle-url] [![codecov][codecov-image]][codecov-url] [![issues][github-issues-image]][github-issues-url]
+
+[rocketchat-url]: https://chat.hyperledger.org/channel/quilt
+[rocketchat-image]: https://open.rocket.chat/images/join-chat.svg
+[circle-image]: https://circleci.com/gh/ripple/crypto-conditions.svg?style=shield
+[circle-url]: https://circleci.com/gh/ripple/crypto-conditions
+[codecov-image]: https://codecov.io/gh/ripple/crypto-conditions/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/ripple/crypto-conditions
+[twitter-image]: https://img.shields.io/twitter/follow/interledger.svg?style=social
+[twitter-url]: https://twitter.com/intent/follow?screen_name=interledger
+[github-issues-image]: https://img.shields.io/github/issues/ripple/crypto-conditions.svg
+[github-issues-url]: https://github.com/ripple/crypto-conditions/issues
 
 Java implementation of Crypto-Conditions (See [RFC](https://datatracker.ietf.org/doc/draft-thomas-crypto-conditions/)).
 
