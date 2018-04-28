@@ -11,6 +11,12 @@
   <name>Ripple Crypto Conditions Parent</name>
   <description>Parent project for Java Crypto Conditions modules.</description>
   <url>https://github.com/ripple/crypto-conditions</url>
+
+  <organization>
+    <name>Ripple Labs</name>
+    <url>https://ripple.com/</url>
+  </organization>
+
   <inceptionYear>2018</inceptionYear>
 
   <licenses>
@@ -63,24 +69,23 @@
   </scm>
 
   <properties>
-    <jackson.version>2.9.5</jackson.version>
-
-    <!-- org.apache.maven.plugins:maven-compiler-plugin -->
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.resources.sourceEncoding>UTF-8</project.resources.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <!-- org.jacoco:jacoc-maven-plugin -->
     <jacoco.propertyName>argLine</jacoco.propertyName>
 
-    <!-- org.apache.maven.plugins:maven-checkstyle-plugin -->
     <checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
     <checkstyle.output.file>
       ${project.build.directory}/checkstyle-reports/checkstyle-result.xml
     </checkstyle.output.file>
     <checkstyle.violationSeverity>warning</checkstyle.violationSeverity>
+
+    <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
+
+    <jackson.version>2.9.5</jackson.version>
   </properties>
 
   <modules>
@@ -90,97 +95,212 @@
 
   <dependencyManagement>
     <dependencies>
-
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>crypto-conditions</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
-
       <dependency>
         <groupId>net.i2p.crypto</groupId>
         <artifactId>eddsa</artifactId>
         <version>0.2.0</version>
       </dependency>
-
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.12</version>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
-
       <dependency>
-        <groupId>org.immutables</groupId>
-        <artifactId>value</artifactId>
-        <version>2.5.6</version>
-        <scope>provided</scope>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${jackson.version}</version>
       </dependency>
-
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-core</artifactId>
         <version>${jackson.version}</version>
       </dependency>
-
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
         <version>${jackson.version}</version>
       </dependency>
-
-      <dependency>
-        <groupId>com.fasterxml.jackson.datatype</groupId>
-        <artifactId>jackson-datatype-jdk8</artifactId>
-        <version>${jackson.version}</version>
-        <scope>test</scope>
-      </dependency>
-
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>21.0</version>
+        <scope>test</scope>
       </dependency>
-
       <dependency>
         <groupId>org.bouncycastle</groupId>
         <artifactId>bcprov-jdk16</artifactId>
         <version>1.46</version>
       </dependency>
-
       <dependency>
         <groupId>org.hamcrest</groupId>
         <artifactId>hamcrest-all</artifactId>
         <version>1.3</version>
         <scope>test</scope>
       </dependency>
-
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-core</artifactId>
+        <version>1.3</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.immutables</groupId>
+        <artifactId>value</artifactId>
+        <version>2.5.6</version>
+        <scope>provided</scope>
+      </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
         <version>2.7.22</version>
         <scope>test</scope>
       </dependency>
-
-      <dependency>
-        <groupId>org.javamoney</groupId>
-        <artifactId>moneta</artifactId>
-        <version>1.1</version>
-      </dependency>
-
     </dependencies>
   </dependencyManagement>
 
   <build>
-
-    <!-- All plugin versions and default config is defined
-          in the pluginManagement section.
-     -->
-
+    <!-- All plugin versions and default config is defined in the pluginManagement section. -->
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.1.0</version>
+          <executions>
+            <execution>
+              <id>analyze</id>
+              <goals>
+                <goal>analyze-only</goal>
+              </goals>
+              <configuration>
+                <failOnWarning>true</failOnWarning>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>1.16</version>
+          <configuration>
+            <!--license to use for the project-->
+            <licenseName>apache_v2</licenseName>
+            <processStartTag>========================LICENSE_START=================================</processStartTag>
+            <processEndTag>=========================LICENSE_END==================================</processEndTag>
 
-        <!-- org.apache.maven.plugins:maven-compiler-plugin -->
+            <!--generate license file even if it exists-->
+            <force>true</force>
+
+
+
+            <licenseMerges>
+              <licenseMerge>Apache License, Version 2.0|The Apache Software License, Version 2.0|Apache 2|Apache License 2.0|AL 2.0</licenseMerge>
+            </licenseMerges>
+
+            <!--exclude test-scoped dependencies from the 3rd party license-list-->
+            <excludedScopes>test</excludedScopes>
+
+            <excludes>
+              <exclude>**/*.json</exclude>
+            </excludes>
+
+          </configuration>
+          <executions>
+            <execution>
+              <id>license-management</id>
+              <goals>
+                <!--updates the source's headers according to the specified license-->
+                <goal>update-file-header</goal>
+
+                <!--Adds the full-blown license file to the final product-->
+                <goal>update-project-license</goal>
+
+                <!--generate and add a list of third-party licenses-->
+                <goal>add-third-party</goal>
+              </goals>
+              <phase>process-sources</phase>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>3.0.0-M1</version>
+          <executions>
+            <execution>
+              <id>enforce-maven</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <requireMavenVersion>
+                    <version>3.0.4</version>
+                  </requireMavenVersion>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.owasp</groupId>
+          <artifactId>dependency-check-maven</artifactId>
+          <version>3.1.2</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <failBuildOnAnyVulnerability>${failBuildOnAnyVulnerability}</failBuildOnAnyVulnerability>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.ning.maven.plugins</groupId>
+          <artifactId>maven-duplicate-finder-plugin</artifactId>
+          <version>1.0.9</version>
+          <configuration>
+            <!--<ignoredDependencies>-->
+            <!--<dependency>-->
+            <!--<groupId>commons-logging</groupId>-->
+            <!--<artifactId>commons-logging</artifactId>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+            <!--<groupId>org.ow2.asm</groupId>-->
+            <!--<artifactId>asm</artifactId>-->
+            <!--</dependency>-->
+            <!--</ignoredDependencies>-->
+          </configuration>
+          <executions>
+            <execution>
+              <phase>validate</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <configuration>
+                <failBuildInCaseOfDifferentContentConflict>true</failBuildInCaseOfDifferentContentConflict>
+                <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict>
+                <!--<ignoredResources>-->
+                <!--<ignoredResource>.*</ignoredResource>-->
+                <!--</ignoredResources>-->
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.6.2</version>
@@ -189,8 +309,6 @@
             <target>${maven.compiler.target}</target>
           </configuration>
         </plugin>
-
-        <!-- org.apache.maven.plugins:maven-source-plugin -->
         <plugin>
           <artifactId>maven-source-plugin</artifactId>
           <version>2.2.1</version>
@@ -203,8 +321,6 @@
             </execution>
           </executions>
         </plugin>
-
-        <!-- org.apache.maven.plugins:maven-javadoc-plugin -->
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>2.10.4</version>
@@ -217,8 +333,6 @@
             </execution>
           </executions>
         </plugin>
-
-        <!-- org.apache.maven.plugins:maven-checkstyle-plugin -->
         <plugin>
           <artifactId>maven-checkstyle-plugin</artifactId>
           <!-- Lock down plugin version for build reproducibility -->
@@ -241,8 +355,6 @@
             </execution>
           </executions>
         </plugin>
-
-        <!-- org.jacoco:jacoc-maven-plugin -->
         <plugin>
           <groupId>org.jacoco</groupId>
           <version>0.8.1</version>
@@ -262,8 +374,6 @@
             </execution>
           </executions>
         </plugin>
-
-        <!-- org.apache.maven.plugins:maven-surefire-plugin -->
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.20</version>
@@ -271,8 +381,6 @@
             <argLine>@{argLine}</argLine>
           </configuration>
         </plugin>
-
-        <!-- org.sonatype.plugins:nexus-staging-maven-plugin -->
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
           <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -284,61 +392,58 @@
             <autoReleaseAfterClose>true</autoReleaseAfterClose>
           </configuration>
         </plugin>
-
       </plugins>
     </pluginManagement>
 
 
-    <!-- All plugins in the plugins section will be run for all sub-modules
-      unless <inherited>false</inherited> is specified. -->
+    <!-- All plugins in the plugins section will be run for all sub-modules unless <inherited>false</inherited> is
+         specified. -->
 
     <plugins>
-
-      <!-- org.apache.maven.plugins:maven-compiler-plugin -->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
-
-      <!-- org.apache.maven.plugins:maven-source-plugin -->
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
       </plugin>
-
-      <!-- org.apache.maven.plugins:maven-javadoc-plugin -->
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
       </plugin>
-
-      <!-- org.apache.maven.plugins:maven-checkstyle-plugin -->
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
       </plugin>
-
-      <!-- org.jacoco:jacoco-maven-plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+      </plugin>
+      <!--<plugin>-->
+      <!--<groupId>org.owasp</groupId>-->
+      <!--<artifactId>dependency-check-maven</artifactId>-->
+      <!--</plugin>-->
+      <plugin>
+        <groupId>com.ning.maven.plugins</groupId>
+        <artifactId>maven-duplicate-finder-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
       </plugin>
-
-      <!-- org.apache.maven.plugins:maven-surefire-plugin -->
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
-
-      <!-- org.sonatype.plugins:nexus-staging-maven-plugin -->
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
       </plugin>
-
     </plugins>
-
   </build>
 
   <reporting>
     <plugins>
-
-      <!-- org.jacoco:jacoc-maven-plugin -->
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
@@ -351,8 +456,6 @@
           </reportSet>
         </reportSets>
       </plugin>
-
-      <!-- org.apache.maven.plugins:maven-checkstyle-plugin -->
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <reportSets>
@@ -363,12 +466,9 @@
           </reportSet>
         </reportSets>
       </plugin>
-
-      <!-- org.apache.maven.plugins:maven-javadoc-plugin -->
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
       </plugin>
-
     </plugins>
   </reporting>
 

@@ -1,7 +1,20 @@
-# Crypto-Conditions [![GitHub issues](https://img.shields.io/github/issues-raw/hyperledger/quilt/crypto-conditions.svg)](https://github.com/hyperledger/quilt/issues?q=is%3Aissue+is%3Aopen+label%3Acrypto-conditions)
+# Crypto-Conditions [![join the chat][rocketchat-image]][rocketchat-url]
+[![circle-ci][circle-image]][circle-url] [![codecov][codecov-image]][codecov-url] [![issues][github-issues-image]][github-issues-url]
+
+[rocketchat-url]: https://chat.hyperledger.org/channel/quilt
+[rocketchat-image]: https://open.rocket.chat/images/join-chat.svg
+[circle-image]: https://circleci.com/gh/ripple/crypto-conditions.svg?style=shield
+[circle-url]: https://circleci.com/gh/ripple/crypto-conditions
+[codecov-image]: https://codecov.io/gh/ripple/crypto-conditions/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/ripple/crypto-conditions
+[twitter-image]: https://img.shields.io/twitter/follow/interledger.svg?style=social
+[twitter-url]: https://twitter.com/intent/follow?screen_name=interledger
+[github-issues-image]: https://img.shields.io/github/issues/ripple/crypto-conditions.svg
+[github-issues-url]: https://github.com/ripple/crypto-conditions/issues
 
 Java implementation of Crypto-Conditions (See [RFC](https://datatracker.ietf.org/doc/draft-thomas-crypto-conditions/)).
 
+* v1.0.x (and above) implements the latest RFC [draft-04](https://tools.ietf.org/html/draft-thomas-crypto-conditions-04).
 * v0.3.x-SNAPSHOT (and above) implements the latest RFC [draft-03](https://tools.ietf.org/html/draft-thomas-crypto-conditions-03).
 * v0.2.x-SNAPSHOT implements the latest RFC [draft-02](https://tools.ietf.org/html/draft-thomas-crypto-conditions-02).
 
@@ -11,7 +24,8 @@ This library uses various cryptographic functions so it relies on implementation
 
 For RSA any provider that supports **SHA256withRSA/PSS** signatures can be used. The library has been tested with BouncyCastle v1.46 but has no runtime dependancy on it.
 
-For ED25519 the library depends on [net.i2p.crypto.eddsa](https://github.com/str4d/ed25519-java). As there are no standard interfaces in the `java.security` namespace for EdDSA keys the library is included as a dependancy. Future versions will hopefully remove this dependency.
+For ED25519 the library depends on [net.i2p.crypto.eddsa](https://github.com/str4d/ed25519-java). As there are no standard interfaces in the `java.security` namespace for
+EdDSA keys, the library is included as a dependancy. Future versions will hopefully remove this dependency.
 
 ## Get it!
 
@@ -36,9 +50,9 @@ Next, add the following Maven dependency:
 <dependencies>
   ...
   <dependency>
-    <groupId>org.interledger</groupId>
+    <groupId>com.ripple.cryptoconditions</groupId>
     <artifactId>crypto-conditions</artifactId>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </dependency>
   ...
 </dependencies>
@@ -59,7 +73,7 @@ Next, import this library as a dependency, like this:
 ```
 dependencies {
     ...
-    compile group: 'org.interledger', name: 'crypto-conditions', version: '0.4.0-SNAPSHOT'
+    compile group: 'com.ripple.cryptoconditions', name: 'crypto-conditions', version: '1.0.0-SNAPSHOT'
     ...
 }
 ```
@@ -74,8 +88,8 @@ To install Maven, follow the instructions at [https://maven.apache.org/install.h
 ### Get the code
 
 ``` sh
-git clone https://github.com/hyperledger/quilt
-cd quilt/crypto-conditions
+git clone https://github.com/ripple/crypto-conditions
+cd ripple/crypto-conditions
 ```
 
 ### Build the Project
@@ -109,19 +123,19 @@ $ mvn checkstyle:checkstyle
 #### PREFIX-SHA-256 Example:
 ```java
   // Create a sub-fulfillment...
-	final byte[] preimage = "My Secret Preimage".getBytes(Charset.defaultCharset());
-	PreimageSha256Fulfillment subfulfillment = PreimageSha256Fulfillment.from(preimage);
+  final byte[] preimage = "My Secret Preimage".getBytes(Charset.defaultCharset());
+  PreimageSha256Fulfillment subfulfillment = PreimageSha256Fulfillment.from(preimage);
 
-	// Narrow the subfulfillment with a prefix...
-	final String prefix = "order-1234";
-	final PrefixSha256Fulfillment fulfillment = PrefixSha256Fulfillment
-	    .from(prefix.getBytes(), 100, subfulfillment);
-	final PrefixSha256Condition condition = fulfillment.getDerivedCondition();
+  // Narrow the subfulfillment with a prefix...
+  final String prefix = "order-1234";
+  final PrefixSha256Fulfillment fulfillment = PrefixSha256Fulfillment
+      .from(prefix.getBytes(), 100, subfulfillment);
+  final PrefixSha256Condition condition = fulfillment.getDerivedCondition();
 
-	// Verify the fulfillment
-	if (fulfillment.verify(condition, new byte[0])) {
-	  System.out.println("Fulfillment is valid!");
-	}
+  // Verify the fulfillment
+  if (fulfillment.verify(condition, new byte[0])) {
+    System.out.println("Fulfillment is valid!");
+  }
 ```
 
 #### ED25519-SHA-256 Example
