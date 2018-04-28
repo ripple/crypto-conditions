@@ -3,7 +3,7 @@
 Java implementation of Crypto-Conditions (See [RFC](https://datatracker.ietf.org/doc/draft-thomas-crypto-conditions/)).
 
 * v0.3.x-SNAPSHOT (and above) implements the latest RFC [draft-03](https://tools.ietf.org/html/draft-thomas-crypto-conditions-03).
-* v0.2.x-SNAPSHOT implements the latest RFC [draft-02](https://tools.ietf.org/html/draft-thomas-crypto-conditions-02).
+* v0.2.x-SNAPSHOT implements the latest RFC [draft-02](https://tools.ietf.org/html/draft-thomas-crypto-conditions-02).  
 
 ## Dependencies
 
@@ -16,7 +16,7 @@ For ED25519 the library depends on [net.i2p.crypto.eddsa](https://github.com/str
 ## Get it!
 
 ### Maven
-This library is contained in the Java package `org.interledger.cryptoconditions`, and can be included in your project
+This library is contained in the Java package `org.interledger.cryptoconditions`, and can be included in your project 
 by first adding a Snapshot Repository, like this:
 
 ```
@@ -67,7 +67,7 @@ dependencies {
 ## Usage
 
 ### Requirements
-This project uses Maven to manage dependencies and other aspects of the build.
+This project uses Maven to manage dependencies and other aspects of the build. 
 To install Maven, follow the instructions at [https://maven.apache.org/install.html](https://maven.apache.org/install.html).
 
 
@@ -111,13 +111,13 @@ $ mvn checkstyle:checkstyle
   // Create a sub-fulfillment...
 	final byte[] preimage = "My Secret Preimage".getBytes(Charset.defaultCharset());
 	PreimageSha256Fulfillment subfulfillment = PreimageSha256Fulfillment.from(preimage);
-
+  
 	// Narrow the subfulfillment with a prefix...
 	final String prefix = "order-1234";
 	final PrefixSha256Fulfillment fulfillment = PrefixSha256Fulfillment
 	    .from(prefix.getBytes(), 100, subfulfillment);
 	final PrefixSha256Condition condition = fulfillment.getDerivedCondition();
-
+  
 	// Verify the fulfillment
 	if (fulfillment.verify(condition, new byte[0])) {
 	  System.out.println("Fulfillment is valid!");
@@ -134,16 +134,16 @@ $ mvn checkstyle:checkstyle
   net.i2p.crypto.eddsa.KeyPairGenerator edDsaKpg = new net.i2p.crypto.eddsa.KeyPairGenerator();
   KeyPair edDsaKeyPair = edDsaKpg.generateKeyPair();
   Signature edDsaSigner = new EdDSAEngine(sha512Digest);
-
+  
   edDsaSigner.initSign(edDsaKeyPair.getPrivate());
   edDsaSigner.update(optionalMessageToSign);
   byte[] edDsaSignature = edDsaSigner.sign();
-
+  
   //Generate ED25519-SHA-256 Fulfillment and Condition
   Ed25519Sha256Fulfillment fulfillment = Ed25519Sha256Fulfillment.from(
   (EdDSAPublicKey) edDsaKeyPair.getPublic(), edDsaSignature);
   Ed25519Sha256Condition condition = fulfillment.getDerivedCondition();
-
+  
   if (fulfillment.verify(condition, optionalMessageToSign)) {
     System.out.println("Fulfillment is valid!");
   }
@@ -152,22 +152,22 @@ $ mvn checkstyle:checkstyle
 #### RSA-SHA-256 Example
 ```java
   // An optional message to sign...should be "new byte[0]" if no message.
-  final byte[] optionalMessageToSign = "message".getBytes();
-
+  final byte[] optionalMessageToSign = "message".getBytes(); 
+  
   //Generate RSA-SHA-256 KeyPair and Signer
   final KeyPairGenerator rsaKpg = KeyPairGenerator.getInstance("RSA");
   rsaKpg.initialize(new RSAKeyGenParameterSpec(2048, new BigInteger("65537")));
   final KeyPair rsaKeyPair = rsaKpg.generateKeyPair();
   final RSAPublicKey rsaPublicKey = (RSAPublicKey) rsaKeyPair.getPublic()
-
+  
   final Signature rsaSigner = Signature.getInstance("SHA256withRSA/PSS");
   rsaSigner.initSign(rsaKeyPair.getPrivate());
   rsaSigner.update(optionalMessageToSign);
   final byte[] rsaSignature = rsaSigner.sign();
-
+  
   final RsaSha256Fulfillment fulfillment = RsaSha256Fulfillment.from(rsaPublicKey, rsaSignature);
   final RsaSha256Condition condition = RsaSha256Condition.from(rsaPublicKey);
-
+  
   if (fulfillment.verify(condition, optionalMessageToSign)) {
     System.out.println("Fulfillment is valid!");
   }
@@ -221,7 +221,7 @@ URI uriEncodedCondition = CryptoConditionUri.toUri(condition);
 
 ## Contributors
 
-Any contribution is very much appreciated!
+Any contribution is very much appreciated! 
 
 [![Rocket.Chat](https://open.rocket.chat/images/join-chat.svg)](https://chat.hyperledger.org/channel/quilt)
 
