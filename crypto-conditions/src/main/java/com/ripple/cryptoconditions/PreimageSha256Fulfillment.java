@@ -62,8 +62,7 @@ public interface PreimageSha256Fulfillment extends Fulfillment<PreimageSha256Con
   }
 
   /**
-   * The DER-encoded bytes from the preimage for this fulfillment, encoded as a String using
-   * Base64URL encoding.
+   * Accessor for this fulfillment's preimage, using Base64URL encoding.
    *
    * @return A {@link String} containing the base64Url-encoded preimage.
    */
