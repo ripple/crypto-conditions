@@ -72,6 +72,7 @@
   <scm>
     <connection>scm:git:git://github.com/ripple/crypto-conditions.git</connection>
     <developerConnection>scm:git:git@github.com:ripple/crypto-conditions.git</developerConnection>
+    <url>https://github.com/ripple/crypto-conditions</url>
   </scm>
 
   <properties>
