@@ -4,7 +4,7 @@
   <groupId>com.ripple.cryptoconditions</groupId>
   <artifactId>crypto-conditions-parent</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.3</version>
+  <version>1.0.4-SNAPSHOT</version>
 
   <name>Ripple Crypto Conditions Parent</name>
   <description>Parent project for Java Crypto Conditions modules.</description>
@@ -70,8 +70,8 @@
   <scm>
     <connection>scm:git:git://github.com/ripple/crypto-conditions.git</connection>
     <developerConnection>scm:git:git@github.com:ripple/crypto-conditions.git</developerConnection>
-    <url>https://github.com/ripple/crypto-conditions1</url>
-    <tag>crypto-conditions-parent-1.0.3</tag>
+    <url>https://github.com/ripple/crypto-conditions</url>
+    <tag>HEAD</tag>
   </scm>
 
   <properties>
