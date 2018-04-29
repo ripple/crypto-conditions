@@ -197,16 +197,19 @@
           <configuration>
             <!--license to use for the project-->
             <licenseName>apache_v2</licenseName>
-            <processStartTag>========================LICENSE_START=================================</processStartTag>
-            <processEndTag>=========================LICENSE_END==================================</processEndTag>
+            <processStartTag>========================LICENSE_START=================================
+            </processStartTag>
+            <processEndTag>=========================LICENSE_END==================================
+            </processEndTag>
 
             <!--generate license file even if it exists-->
             <force>true</force>
 
 
-
             <licenseMerges>
-              <licenseMerge>Apache License, Version 2.0|The Apache Software License, Version 2.0|Apache 2|Apache License 2.0|AL 2.0</licenseMerge>
+              <licenseMerge>Apache License, Version 2.0|The Apache Software License, Version 2.0|Apache
+                2|Apache License 2.0|AL 2.0
+              </licenseMerge>
             </licenseMerges>
 
             <!--exclude test-scoped dependencies from the 3rd party license-list-->
@@ -273,18 +276,6 @@
           <groupId>com.ning.maven.plugins</groupId>
           <artifactId>maven-duplicate-finder-plugin</artifactId>
           <version>1.0.9</version>
-          <configuration>
-            <!--<ignoredDependencies>-->
-            <!--<dependency>-->
-            <!--<groupId>commons-logging</groupId>-->
-            <!--<artifactId>commons-logging</artifactId>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-            <!--<groupId>org.ow2.asm</groupId>-->
-            <!--<artifactId>asm</artifactId>-->
-            <!--</dependency>-->
-            <!--</ignoredDependencies>-->
-          </configuration>
           <executions>
             <execution>
               <phase>validate</phase>
@@ -292,11 +283,9 @@
                 <goal>check</goal>
               </goals>
               <configuration>
-                <failBuildInCaseOfDifferentContentConflict>true</failBuildInCaseOfDifferentContentConflict>
+                <failBuildInCaseOfDifferentContentConflict>true
+                </failBuildInCaseOfDifferentContentConflict>
                 <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict>
-                <!--<ignoredResources>-->
-                <!--<ignoredResource>.*</ignoredResource>-->
-                <!--</ignoredResources>-->
               </configuration>
             </execution>
           </executions>
@@ -392,9 +381,19 @@
             <autoReleaseAfterClose>true</autoReleaseAfterClose>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.5.3</version>
+          <configuration>
+            <autoVersionSubmodules>true</autoVersionSubmodules>
+            <useReleaseProfile>false</useReleaseProfile>
+            <releaseProfiles>release</releaseProfiles>
+            <goals>deploy</goals>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
-
 
     <!-- All plugins in the plugins section will be run for all sub-modules unless <inherited>false</inherited> is
          specified. -->
