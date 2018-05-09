@@ -394,10 +394,6 @@
         <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.owasp</groupId>
-        <artifactId>dependency-check-maven</artifactId>
-      </plugin>
-      <plugin>
         <groupId>com.ning.maven.plugins</groupId>
         <artifactId>maven-duplicate-finder-plugin</artifactId>
       </plugin>
