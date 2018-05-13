@@ -9,9 +9,9 @@ package com.ripple.cryptoconditions;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,15 +21,14 @@ package com.ripple.cryptoconditions;
  */
 
 import com.ripple.cryptoconditions.utils.HashUtils;
-
 import org.immutables.value.Value;
 
 import java.util.Base64;
 import java.util.Objects;
 
 /**
- * An implementation of {@link Fulfillment} for a crypto-condition type "PREIMAGE-SHA-256" based
- * upon a preimage and the SHA-256 hash function.
+ * An implementation of {@link Fulfillment} for a crypto-condition type "PREIMAGE-SHA-256" based upon a preimage and the
+ * SHA-256 hash function.
  *
  * @see "https://datatracker.ietf.org/doc/draft-thomas-crypto-conditions/"
  */
@@ -89,8 +88,7 @@ public interface PreimageSha256Fulfillment extends Fulfillment<PreimageSha256Con
     }
 
     /**
-     * Calculates the cost from this condition, which is simply the length from the
-     * encodedPreimage.
+     * Calculates the cost from this condition, which is simply the length from the encodedPreimage.
      *
      * @param preimage The encodedPreimage associated with this condition.
      *

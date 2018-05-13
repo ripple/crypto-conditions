@@ -9,9 +9,9 @@ package com.ripple.cryptoconditions;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,8 +27,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 /**
- * Implementation of a fulfillment based on a prefix, a sub fulfillment, and the SHA-256
- * function.
+ * Implementation of a fulfillment based on a prefix, a sub fulfillment, and the SHA-256 function.
  */
 public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Condition> {
 
@@ -36,7 +35,7 @@ public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Conditi
    * Constructs an instance of the fulfillment using the supplied data.
    *
    * @param prefix           The prefix associated with the fulfillment.
-   * @param maxMessageLength The maximum length from a message allowed by this fulfillment.
+   * @param maxMessageLength The maximum length of the message allowed by this fulfillment.
    * @param subfulfillment   The subfulfillments that this fulfillment depends on.
    *
    * @return A newly created, immutable instance of {@link PrefixSha256Fulfillment}.
@@ -68,9 +67,9 @@ public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Conditi
    *
    * @return A byte array containing the prefix for this fulfillment.
    *
-   * @deprecated Java 8 does not have the concept from an immutable byte array, so this method
-   *     allows external callers to accidentally or intentionally mutate the prefix. As such, this
-   *     method may be removed in a future version. Prefer {@link #getPrefixBase64Url()} instead.
+   * @deprecated Java 8 does not have the concept from an immutable byte array, so this method allows external callers
+   *     to accidentally or intentionally mutate the prefix. As such, this method may be removed in a future version.
+   *     Prefer {@link #getPrefixBase64Url()} instead.
    */
   @Deprecated
   byte[] getPrefix();
@@ -82,6 +81,15 @@ public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Conditi
    */
   String getPrefixBase64Url();
 
+  /**
+   * <p>Accessor for the maximum message length, which per the spec is the maximum size that a given prefix
+   * fulfillment will allow in order validate a given condition against this fulfillment.</p>
+   *
+   * <p>More specifically, the spec says that a A PREFIX-SHA-256 fulfillment is valid iff, "The size of M (the
+   * message), in bytes, is less than or equal to F.maxMessageLength...".</p>
+   *
+   * @return The maximum message length supported by a prefix fulfillment.
+   */
   long getMaxMessageLength();
 
   Fulfillment getSubfulfillment();
@@ -97,8 +105,7 @@ public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Conditi
 
     @Override
     public boolean verify(final PrefixSha256Condition condition, final byte[] message) {
-      Objects.requireNonNull(condition,
-          "Can't verify a PrefixSha256Fulfillment against a null condition!");
+      Objects.requireNonNull(condition, "Can't verify a PrefixSha256Fulfillment against a null condition!");
       Objects.requireNonNull(message, "Message must not be null!");
 
       if (message.length > getMaxMessageLength()) {

@@ -9,9 +9,9 @@ package com.ripple.cryptoconditions;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,6 @@ package com.ripple.cryptoconditions;
 import com.ripple.cryptoconditions.der.DerOutputStream;
 import com.ripple.cryptoconditions.der.DerTag;
 import com.ripple.cryptoconditions.utils.HashUtils;
-
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
 import org.immutables.value.Value;
 
@@ -66,9 +65,8 @@ public interface Ed25519Sha256Condition extends Sha256Condition {
    * cost.</p>
    *
    * <p>This constructor _should_ be primarily used by CODECs, whereas developers should, in
-   * general, use  {@link Ed25519Sha256Condition#from(EdDSAPublicKey)}, or else create an actual
-   * fulfillment using {@link Ed25519Sha256Fulfillment} and then generate a condition from that
-   * object.</p>
+   * general, use  {@link Ed25519Sha256Condition#from(EdDSAPublicKey)}, or else create an actual fulfillment using
+   * {@link Ed25519Sha256Fulfillment} and then generate a condition from that object.</p>
    *
    * @param fingerprint The binary representation of the fingerprint for this condition.
    *
@@ -97,8 +95,8 @@ public interface Ed25519Sha256Condition extends Sha256Condition {
       ConditionBase<Ed25519Sha256Condition> implements Ed25519Sha256Condition {
 
     /**
-     * The public key and signature are a fixed size therefore the cost for an ED25519
-     * crypto-condition is fixed at 131072.
+     * The public key and signature are a fixed size therefore the cost for an ED25519 crypto-condition is fixed at
+     * 131072.
      */
     static final long COST = 131072L;
 
