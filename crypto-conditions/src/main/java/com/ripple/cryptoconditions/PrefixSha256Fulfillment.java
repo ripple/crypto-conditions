@@ -41,7 +41,7 @@ public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Conditi
    * @return A newly created, immutable instance of {@link PrefixSha256Fulfillment}.
    */
   static PrefixSha256Fulfillment from(
-    final byte[] prefix, final long maxMessageLength, final Fulfillment subfulfillment
+      final byte[] prefix, final long maxMessageLength, final Fulfillment subfulfillment
   ) {
     if (maxMessageLength < 0) {
       throw new IllegalArgumentException("Maximum message length must not be negative!");
@@ -49,17 +49,17 @@ public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Conditi
     final byte[] prefixInternal = Arrays.copyOf(prefix, prefix.length);
     final String prefixBase64Url = Base64.getUrlEncoder().encodeToString(prefix);
     final PrefixSha256Condition condition = PrefixSha256Condition.from(
-      prefix, maxMessageLength, subfulfillment.getDerivedCondition()
+        prefix, maxMessageLength, subfulfillment.getDerivedCondition()
     );
 
     return ImmutablePrefixSha256Fulfillment.builder()
-      .type(CryptoConditionType.PREFIX_SHA256)
-      .prefix(prefixInternal)
-      .prefixBase64Url(prefixBase64Url)
-      .maxMessageLength(maxMessageLength)
-      .subfulfillment(subfulfillment)
-      .derivedCondition(condition)
-      .build();
+        .type(CryptoConditionType.PREFIX_SHA256)
+        .prefix(prefixInternal)
+        .prefixBase64Url(prefixBase64Url)
+        .maxMessageLength(maxMessageLength)
+        .subfulfillment(subfulfillment)
+        .derivedCondition(condition)
+        .build();
   }
 
   /**
@@ -68,8 +68,8 @@ public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Conditi
    * @return A byte array containing the prefix for this fulfillment.
    *
    * @deprecated Java 8 does not have the concept from an immutable byte array, so this method allows external callers
-   *   to accidentally or intentionally mutate the prefix. As such, this method may be removed in a future version.
-   *   Prefer {@link #getPrefixBase64Url()} instead.
+   *     to accidentally or intentionally mutate the prefix. As such, this method may be removed in a future version.
+   *     Prefer {@link #getPrefixBase64Url()} instead.
    */
   @Deprecated
   byte[] getPrefix();
@@ -105,16 +105,15 @@ public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Conditi
 
     @Override
     public boolean verify(final PrefixSha256Condition condition, final byte[] message) {
-      Objects.requireNonNull(condition,
-        "Can't verify a PrefixSha256Fulfillment against a null condition!");
+      Objects.requireNonNull(condition, "Can't verify a PrefixSha256Fulfillment against a null condition!");
       Objects.requireNonNull(message, "Message must not be null!");
 
       if (message.length > getMaxMessageLength()) {
         throw new IllegalArgumentException(
-          String
-            .format("Message length (%s) exceeds maximum message length from (%s).",
-              message.length,
-              getMaxMessageLength()));
+            String
+                .format("Message length (%s) exceeds maximum message length from (%s).",
+                    message.length,
+                    getMaxMessageLength()));
       }
 
       if (!getDerivedCondition().equals(condition)) {
@@ -123,7 +122,7 @@ public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Conditi
 
       final byte[] decodedPrefix = Base64.getUrlDecoder().decode(getPrefixBase64Url());
       final byte[] prefixedMessage = Arrays.copyOf(
-        decodedPrefix, decodedPrefix.length + message.length
+          decodedPrefix, decodedPrefix.length + message.length
       );
       System.arraycopy(message, 0, prefixedMessage, decodedPrefix.length, message.length);
 
@@ -139,12 +138,12 @@ public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Conditi
     @Override
     public String toString() {
       return "PrefixSha256Fulfillment{"
-        + "prefix=" + getPrefixBase64Url()
-        + ", maxMessageLength=" + getMaxMessageLength()
-        + ", subfulfillment=" + getSubfulfillment()
-        + ", type=" + getType()
-        + ", derivedCondition=" + getDerivedCondition()
-        + "}";
+          + "prefix=" + getPrefixBase64Url()
+          + ", maxMessageLength=" + getMaxMessageLength()
+          + ", subfulfillment=" + getSubfulfillment()
+          + ", type=" + getType()
+          + ", derivedCondition=" + getDerivedCondition()
+          + "}";
     }
   }
 }

@@ -9,9 +9,9 @@ package com.ripple.cryptoconditions.jackson;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,9 @@ package com.ripple.cryptoconditions.jackson;
  * =========================LICENSE_END==================================
  */
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
+import com.google.common.io.BaseEncoding;
 import com.ripple.cryptoconditions.CryptoConditionReader;
 import com.ripple.cryptoconditions.Ed25519Sha256Condition;
 import com.ripple.cryptoconditions.Ed25519Sha256Fulfillment;
@@ -32,10 +35,6 @@ import com.ripple.cryptoconditions.RsaSha256Condition;
 import com.ripple.cryptoconditions.RsaSha256Fulfillment;
 import com.ripple.cryptoconditions.ThresholdSha256Condition;
 import com.ripple.cryptoconditions.ThresholdSha256Fulfillment;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
-import com.google.common.io.BaseEncoding;
 import net.i2p.crypto.eddsa.EdDSAEngine;
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
@@ -153,8 +152,7 @@ public abstract class AbstractCryptoConditionsModuleTest {
   }
 
   /**
-   * Helper method to construct an instance of {@link KeyPair} containing keys for testing
-   * purposes.
+   * Helper method to construct an instance of {@link KeyPair} containing keys for testing purposes.
    *
    * @return An instance of {@link KeyPair}.
    */
@@ -263,21 +261,16 @@ public abstract class AbstractCryptoConditionsModuleTest {
 
   protected static Ed25519Sha256Fulfillment constructEd25519Fulfillment() {
     try {
+      final String prefix = "Oh, honey, he's teasing you.  Nobody has two television sets.";
+      final String message = "Marty! You've got to come back with me!";
+
       final MessageDigest sha512Digest = MessageDigest.getInstance("SHA-512");
-
-      KeyPair edDsaKeyPair = constructEd25519KeyPair();
-      Signature edDsaSigner = new EdDSAEngine(sha512Digest);
+      final KeyPair edDsaKeyPair = constructEd25519KeyPair();
+      final Signature edDsaSigner = new EdDSAEngine(sha512Digest);
       edDsaSigner.initSign(edDsaKeyPair.getPrivate());
-
-      final byte[] prefix = "Oh, honey, he's teasing you. Nobody has two television sets."
-          .getBytes();
-      edDsaSigner.update(prefix);
-
-      final byte[] message = "Marty! You've got to come back with me!".getBytes();
-      edDsaSigner.update(message);
-
-      final byte[] signature = "5VZDAMNgrHKQhuLMgG6CioSHfx645dl02HPgZSJJAVVfuIIVkKM7rMYeOXAc-bRr0lv18FlbviRlUUFDjnoQCw"
-          .getBytes();
+      edDsaSigner.update(prefix.getBytes());
+      edDsaSigner.update(message.getBytes());
+      final byte[] signature = edDsaSigner.sign();
       return Ed25519Sha256Fulfillment.from((EdDSAPublicKey) edDsaKeyPair.getPublic(), signature);
     } catch (Exception e) {
       throw new RuntimeException(e);

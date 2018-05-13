@@ -47,17 +47,17 @@ public interface PreimageSha256Fulfillment extends Fulfillment<PreimageSha256Con
 
     final long cost = AbstractPreimageSha256Fulfillment.calculateCost(preimage);
     final byte[] fingerprint = HashUtils.hashFingerprintContents(
-      AbstractPreimageSha256Fulfillment.constructFingerprint(preimage)
+        AbstractPreimageSha256Fulfillment.constructFingerprint(preimage)
     );
     final PreimageSha256Condition condition = PreimageSha256Condition.fromCostAndFingerprint(
-      cost, fingerprint
+        cost, fingerprint
     );
 
     return ImmutablePreimageSha256Fulfillment.builder()
-      .type(CryptoConditionType.PREIMAGE_SHA256)
-      .encodedPreimage(encodedPreimage)
-      .derivedCondition(condition)
-      .build();
+        .type(CryptoConditionType.PREIMAGE_SHA256)
+        .encodedPreimage(encodedPreimage)
+        .derivedCondition(condition)
+        .build();
   }
 
   /**
@@ -101,7 +101,7 @@ public interface PreimageSha256Fulfillment extends Fulfillment<PreimageSha256Con
     @Override
     public final boolean verify(final PreimageSha256Condition condition, final byte[] message) {
       Objects.requireNonNull(condition,
-        "Can't verify a PreimageSha256Fulfillment against an null condition.");
+          "Can't verify a PreimageSha256Fulfillment against an null condition.");
       Objects.requireNonNull(message, "Message must not be null!");
 
       return getDerivedCondition().equals(condition);

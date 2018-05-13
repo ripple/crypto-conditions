@@ -9,9 +9,9 @@ package com.ripple.cryptoconditions.jackson;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,19 +20,18 @@ package com.ripple.cryptoconditions.jackson;
  * =========================LICENSE_END==================================
  */
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static com.ripple.cryptoconditions.jackson.Encoding.BASE64;
 import static com.ripple.cryptoconditions.jackson.Encoding.BASE64URL;
 import static com.ripple.cryptoconditions.jackson.Encoding.BASE64URL_WITHOUT_PADDING;
 import static com.ripple.cryptoconditions.jackson.Encoding.BASE64_WITHOUT_PADDING;
 import static com.ripple.cryptoconditions.jackson.Encoding.HEX;
-
-import com.ripple.cryptoconditions.Ed25519Sha256Fulfillment;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ripple.cryptoconditions.Ed25519Sha256Fulfillment;
 import org.immutables.value.Value;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,25 +46,27 @@ import java.util.Collection;
  * Validates the functionality of {@link CryptoConditionsModule}.
  */
 @RunWith(Parameterized.class)
-public class Ed25519Sha256FulfillmentCryptoConditionModuleTest extends
-    AbstractCryptoConditionsModuleTest {
+public class Ed25519Sha256FulfillmentCryptoConditionModuleTest extends AbstractCryptoConditionsModuleTest {
 
   private static final String ED25519_FULFILLMENT_DER_BYTES_HEX =
-      "A47A802036AE1B97C577AE6AFB0294E91839FA7B1F9332791B9F2C5D586819025F4A2F1D815635565A44414D4E67"
-          + "72484B5168754C4D67473643696F53486678363435646C30324850675A534A4A41565666754949566B4B4D"
-          + "37724D59654F5841632D625272306C763138466C627669526C555546446A6E6F514377";
+      "A464802036AE1B97C577AE6AFB0294E91839FA7B1F9332791B9F2C5D586819025F4A2F1D8140596413BDF20DC96833E9AEA3A12BA04F3579"
+          + "0C249617AD5A7BB5DC404E22AD1C20DBE413C113ED45D4E2BB73AB5E48B90FA7E379C55D08423E2100CC23E2210A";
+
   private static final String ED25519_FULFILLMENT_DER_BYTES_BASE64
-      = "pHqAIDauG5fFd65q+wKU6Rg5+nsfkzJ5G58sXVhoGQJfSi8dgVY1VlpEQU1OZ3JIS1FodUxNZ0c2Q2lvU0hmeDY0NW"
-      + "RsMDJIUGdaU0pKQVZWZnVJSVZrS003ck1ZZU9YQWMtYlJyMGx2MThGbGJ2aVJsVVVGRGpub1FDdw==";
+      = "pGSAIDauG5fFd65q+wKU6Rg5+nsfkzJ5G58sXVhoGQJfSi8dgUBZZBO98g3JaDPprqOhK6BPNXkMJJYXrVp7tdxATiKtHCDb5BPBE+1F1OK7c6"
+      + "teSLkPp+N5xV0IQj4hAMwj4iEK";
+
   private static final String ED25519_FULFILLMENT_DER_BYTES_BASE64_WITHOUTPADDING
-      = "pHqAIDauG5fFd65q+wKU6Rg5+nsfkzJ5G58sXVhoGQJfSi8dgVY1VlpEQU1OZ3JIS1FodUxNZ0c2Q2lvU0hmeDY0NW"
-      + "RsMDJIUGdaU0pKQVZWZnVJSVZrS003ck1ZZU9YQWMtYlJyMGx2MThGbGJ2aVJsVVVGRGpub1FDdw";
+      = "pGSAIDauG5fFd65q+wKU6Rg5+nsfkzJ5G58sXVhoGQJfSi8dgUBZZBO98g3JaDPprqOhK6BPNXkMJJYXrVp7tdxATiKtHCDb5BPBE+1F1OK7c6"
+      + "teSLkPp+N5xV0IQj4hAMwj4iEK";
+
   private static final String ED25519_FULFILLMENT_DER_BYTES_BASE64_URL
-      = "pHqAIDauG5fFd65q-wKU6Rg5-nsfkzJ5G58sXVhoGQJfSi8dgVY1VlpEQU1OZ3JIS1FodUxNZ0c2Q2lvU0hmeDY0NW"
-      + "RsMDJIUGdaU0pKQVZWZnVJSVZrS003ck1ZZU9YQWMtYlJyMGx2MThGbGJ2aVJsVVVGRGpub1FDdw==";
+      = "pGSAIDauG5fFd65q-wKU6Rg5-nsfkzJ5G58sXVhoGQJfSi8dgUBZZBO98g3JaDPprqOhK6BPNXkMJJYXrVp7tdxATiKtHCDb5BPBE-1F1OK7c6"
+      + "teSLkPp-N5xV0IQj4hAMwj4iEK";
+
   private static final String ED25519_FULFILLMENT_DER_BYTES_BASE64_URL_WITHOUTPADDING
-      = "pHqAIDauG5fFd65q-wKU6Rg5-nsfkzJ5G58sXVhoGQJfSi8dgVY1VlpEQU1OZ3JIS1FodUxNZ0c2Q2lvU0hmeDY0NW"
-      + "RsMDJIUGdaU0pKQVZWZnVJSVZrS003ck1ZZU9YQWMtYlJyMGx2MThGbGJ2aVJsVVVGRGpub1FDdw";
+      = "pGSAIDauG5fFd65q-wKU6Rg5-nsfkzJ5G58sXVhoGQJfSi8dgUBZZBO98g3JaDPprqOhK6BPNXkMJJYXrVp7tdxATiKtHCDb5BPBE-1F1OK7c6"
+      + "teSLkPp-N5xV0IQj4hAMwj4iEK";
 
   private static Ed25519Sha256Fulfillment FULFILLMENT = constructEd25519Fulfillment();
 
@@ -83,6 +84,7 @@ public class Ed25519Sha256FulfillmentCryptoConditionModuleTest extends
 
   /**
    * Get test parameters.
+   *
    * @return the parameters for the tests
    */
   @Parameters
@@ -96,7 +98,6 @@ public class Ed25519Sha256FulfillmentCryptoConditionModuleTest extends
         {BASE64URL, ED25519_FULFILLMENT_DER_BYTES_BASE64_URL},
         {BASE64URL_WITHOUT_PADDING, ED25519_FULFILLMENT_DER_BYTES_BASE64_URL_WITHOUTPADDING}
     });
-
   }
 
   @Test

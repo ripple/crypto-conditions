@@ -9,9 +9,9 @@ package com.ripple.cryptoconditions;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,8 +34,8 @@ import java.util.Base64;
 import java.util.Objects;
 
 /**
- * An implementation of {@link Fulfillment} for a crypto-condition fulfillment of type
- * "ED25519-SHA256" using the ED-25519 and SHA-256 functions.
+ * An implementation of {@link Fulfillment} for a crypto-condition fulfillment of type "ED25519-SHA256" using the
+ * ED-25519 and SHA-256 functions.
  *
  * @see "https://datatracker.ietf.org/doc/draft-thomas-crypto-conditions/"
  */
@@ -44,15 +44,21 @@ public interface Ed25519Sha256Fulfillment extends Fulfillment<Ed25519Sha256Condi
   /**
    * Constructs an instance of the fulfillment.
    *
-   * @param publicKey An {@link EdDSAPublicKey} associated with this fulfillment and its
-   *                  corresponding condition.
-   * @param signature A byte array containing the signature associated with this fulfillment.
+   * @param publicKey An {@link EdDSAPublicKey} associated with this fulfillment and its corresponding condition.
+   * @param signature A byte array containing the signature of a message signed by the private key that corresponds to
+   *                  {@code publicKey}. Note that if this fulfillment is going to be used in a {@link
+   *                  PrefixSha256Fulfillment}, then this signature must be the derived by signing the
+   *                  <tt>prefix</tt> _and_ <tt>message</tt> together as a single value.
    *
    * @return A newly created, immutable instance of {@link Ed25519Sha256Fulfillment}.
    */
   static Ed25519Sha256Fulfillment from(final EdDSAPublicKey publicKey, final byte[] signature) {
     Objects.requireNonNull(publicKey, "EdDSAPublicKey must not be null!");
     Objects.requireNonNull(signature, "Signature must not be null!");
+
+    if (signature.length != 64) {
+      throw new IllegalArgumentException("Signature length must be 64 bytes for Ed25519Sha256Fulfillments!");
+    }
 
     final byte[] immutableSignature = Arrays.copyOf(signature, signature.length);
     final String signatureBase64Url = Base64.getUrlEncoder().encodeToString(signature);
@@ -79,10 +85,9 @@ public interface Ed25519Sha256Fulfillment extends Fulfillment<Ed25519Sha256Condi
    *
    * @return A byte array containing the signature for this fulfillment.
    *
-   * @deprecated Java 8 does not have the concept from an immutable byte array, so this method
-   *     allows external callers to accidentally or intentionally mute the prefix. As such, this
-   *     method may be removed in a future version. Prefer {@link #getSignatureBase64Url()}
-   *     instead.
+   * @deprecated Java 8 does not have the concept from an immutable byte array, so this method allows external callers
+   *     to accidentally or intentionally mute the prefix. As such, this method may be removed in a future version.
+   *     Prefer {@link #getSignatureBase64Url()} instead.
    */
   @Deprecated
   byte[] getSignature();
@@ -105,8 +110,7 @@ public interface Ed25519Sha256Fulfillment extends Fulfillment<Ed25519Sha256Condi
 
     @Override
     public boolean verify(final Ed25519Sha256Condition condition, final byte[] message) {
-      Objects.requireNonNull(condition,
-          "Can't verify a Ed25519Sha256Fulfillment against an null condition.");
+      Objects.requireNonNull(condition, "Can't verify a Ed25519Sha256Fulfillment against an null condition.");
       Objects.requireNonNull(message, "Message must not be null!");
 
       if (!getDerivedCondition().equals(condition)) {

@@ -31,6 +31,7 @@ import static org.junit.Assert.assertTrue;
 import com.ripple.cryptoconditions.helpers.TestFulfillmentFactory;
 import com.ripple.cryptoconditions.helpers.TestKeyFactory;
 import net.i2p.crypto.eddsa.EdDSAEngine;
+import net.i2p.crypto.eddsa.EdDSAPrivateKey;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
 import org.junit.Test;
 
@@ -41,6 +42,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.Base64;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -54,7 +56,7 @@ public class PrefixSha256FulfillmentTest extends AbstractCryptoConditionTest {
   private static final String ENCODED_FINGERPRINT = "-28EVNr7rOwQ_XsvrJVxLvjBY38ZNZlHaPHYpsIbmH4";
 
   private static final PreimageSha256Fulfillment SUBFULFILLMENT = TestFulfillmentFactory
-    .constructPreimageFulfillment(PREIMAGE1);
+      .constructPreimageFulfillment(PREIMAGE1);
 
   /**
    * Tests concurrently creating an instance of {@link RsaSha256Fulfillment}. This test validates the fix for Github
@@ -67,7 +69,7 @@ public class PrefixSha256FulfillmentTest extends AbstractCryptoConditionTest {
   public void testConstructionUsingMultipleThreads() throws Exception {
     final Runnable runnableTest = () -> {
       final PrefixSha256Fulfillment preimageSha256Fulfillment =
-        constructPrefixSha256Fulfillment(UUID.randomUUID().toString());
+          constructPrefixSha256Fulfillment(UUID.randomUUID().toString());
       assertThat(preimageSha256Fulfillment.getType(), is(CryptoConditionType.PREFIX_SHA256));
       assertThat(preimageSha256Fulfillment.verify(preimageSha256Fulfillment.getDerivedCondition()), is(true));
     };
@@ -128,7 +130,10 @@ public class PrefixSha256FulfillmentTest extends AbstractCryptoConditionTest {
   }
 
   /**
-   * Helper method to support {@link #testSubconditionMessageMatchesPrefix()}.
+   * Helper method to support {@link #testSubconditionMessageMatchesPrefix()}. This method constructs a signature for a
+   * PrefixSha256Fulfillment that conntains a Ed25519Sha256Fulfillment subfulfillment. In order to do this, the holder
+   * of the Ed25519 private key must sign a message that consists of the prefix+message, otherwise the fulfillment will
+   * not validate.
    */
   private void testSubconditionMessageCombinations(final String message, final String prefix) {
     try {
@@ -140,17 +145,118 @@ public class PrefixSha256FulfillmentTest extends AbstractCryptoConditionTest {
       final byte[] edDsaSignature = edDsaSigner.sign();
 
       final Ed25519Sha256Fulfillment signatureFulfillment = Ed25519Sha256Fulfillment
-        .from((EdDSAPublicKey) ed25519KeyPair.getPublic(), edDsaSignature);
+          .from((EdDSAPublicKey) ed25519KeyPair.getPublic(), edDsaSignature);
 
       // Construct a Prefix Fulfillment
       final PrefixSha256Fulfillment prefixFulfillment = PrefixSha256Fulfillment.from(
-        prefix.getBytes(), prefix.length() + message.length(), signatureFulfillment
+          prefix.getBytes(), (prefix.length() + message.length()), signatureFulfillment
       );
       final PrefixSha256Condition prefixCondition = prefixFulfillment.getDerivedCondition();
       assertTrue(prefixFulfillment.verify(prefixCondition, message.getBytes()));
     } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * <p>Validates Issue 12. In this case, we want to prove that a condition will not validate against a fulfillment
+   * if the private key is not accessible to any of the parties when trying to assemble a Prefix condition with an
+   * Ed25519 sub-condition.</p>
+   *
+   * <p>More specifically, this test first creates an {@link Ed25519Sha256Condition} using a public key. Next, it
+   * creates a {@link PrefixSha256Condition} and uses the ed25519 condition as the sub-condition. Next, a {@link
+   * PrefixSha256Fulfillment} is created with a random signature. The test asserts that the condition never validates
+   * against the fulfillment, as expected (in other words, in order for somebody to construct a prefix fulfillment that
+   * has an Ed25519 subcondition, that somebody _must_ have access to the Ed25519 private key in order to sign a
+   * message, even if that message is empty).</p>
+   *
+   * @see "https://github.com/ripple/crypto-conditions/issues/12"
+   */
+  @Test
+  public final void testSubconditionWithOnlyPublicKey() {
+    final String message = "";
+    final String prefix = "Back to the Future!";
+
+    final EdDSAPublicKey publicKey = (EdDSAPublicKey) TestKeyFactory.generateRandomEd25519KeyPair().getPublic();
+
+    // In order for the assertion at the end of this test to pass, this method would need access to the Ed25519
+    // private key in order to sign an empty message and prefix.
+    byte[] randomSignatureBytes = new byte[64];
+    new Random().nextBytes(randomSignatureBytes);
+
+    // Create an Ed25519Sha256Condition using only a public-key, then wrap it in a prefix condition using the above
+    // prefix.
+    final Ed25519Sha256Condition subcondition = Ed25519Sha256Condition.from(publicKey);
+    final PrefixSha256Condition prefixCondition = PrefixSha256Condition
+        .from(prefix.getBytes(), prefix.length(), subcondition);
+
+    // Create a fulfillment using the public-keys, but a signed-message.
+    final Ed25519Sha256Fulfillment subfulfillment = Ed25519Sha256Fulfillment.from(publicKey, randomSignatureBytes);
+    final PrefixSha256Fulfillment prefixFulfillment = PrefixSha256Fulfillment
+        .from(prefix.getBytes(), prefix.length() + message.length(), subfulfillment);
+
+    assertThat(prefixFulfillment.verify(prefixCondition, message.getBytes()), is(false));
+  }
+
+  /**
+   * <p>Validates Issue 12. In this case, we want to prove that a condition will not validate against a fulfillment
+   * if the signature being verified was not derived from both the message of the sub-condition and the prefix of the
+   * prefix-condition.</p>
+   *
+   * <p>Per the RFC, "Implementations MUST prepend the prefix to the provided message and will use the resulting
+   * value as the message to validate the sub-fulfillment."</p>
+   *
+   * <p>More specifically, this test first creates an {@link Ed25519Sha256Condition} using a public key. Next, it
+   * creates a {@link Ed25519Sha256Fulfillment} using the same private key, and a message signed by the corresponding
+   * Ed25519 private key. Note that no prefix was used to create the signature up to this point.</p>
+   *
+   * <p>Next, an {@link PrefixSha256Condition} is created using the above condition as its sub-condition. Then, a
+   * {@link PrefixSha256Fulfillment} is created. When {@link PrefixSha256Fulfillment#verify(Condition, byte[])} is
+   * called, the only piece of data signed by the Ed25519 private key is the message, but not the prefix, which violates
+   * the RFC quote above. Thus, the verify call fails, as expected.</p>
+   *
+   * @see "https://github.com/ripple/crypto-conditions/issues/12"
+   * @see "https://tools.ietf.org/html/draft-thomas-crypto-conditions-04#section-8.2"
+   */
+  @Test
+  public final void testSubconditionWithOnlyMessageSignedButNotPrefix()
+      throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+
+    //////////////
+    // 1. Create a regular Ed25519 Condition/Fulfillment pair...
+    //////////////
+    final String message = "message";
+
+    final KeyPair keyPair = TestKeyFactory.generateRandomEd25519KeyPair();
+    final EdDSAPublicKey publicKey = (EdDSAPublicKey) keyPair.getPublic();
+    final EdDSAPrivateKey privateKey = (EdDSAPrivateKey) keyPair.getPrivate();
+
+    // Create an Ed25519Sha256Condition using only a public-key. Verify it with a signed-message.
+    final Ed25519Sha256Condition ed25519Sha256Condition = Ed25519Sha256Condition.from(publicKey);
+    // Sign the message...
+    final MessageDigest sha512Digest = MessageDigest.getInstance("SHA-512");
+    final Signature edDsaSigner = new EdDSAEngine(sha512Digest);
+    edDsaSigner.initSign(privateKey);
+    edDsaSigner.update(message.getBytes());
+    final byte[] edDsaSignature = edDsaSigner.sign();
+    final Ed25519Sha256Fulfillment ed25519Sha256Fulfillment = Ed25519Sha256Fulfillment.from(publicKey, edDsaSignature);
+
+    assertThat(ed25519Sha256Fulfillment.verify(ed25519Sha256Fulfillment.getDerivedCondition(), message.getBytes()),
+        is(true));
+    assertThat(ed25519Sha256Fulfillment.verify(ed25519Sha256Condition, message.getBytes()), is(true));
+
+    //////////////
+    // 2. Wrap the Ed25519 Condition/Fulfillment in a Prefix Condition/Fulfillment and attempt to verify...
+    //////////////
+    final String prefix = "prefix";
+    final PrefixSha256Condition prefixCondition = PrefixSha256Condition
+        .from(prefix.getBytes(), prefix.length(), ed25519Sha256Condition);
+
+    // Create a fulfillment using the public-keys, but a signed-message.
+    final PrefixSha256Fulfillment prefixFulfillment = PrefixSha256Fulfillment
+        .from(prefix.getBytes(), prefix.length() + message.length(), ed25519Sha256Fulfillment);
+
+    assertThat(prefixFulfillment.verify(prefixCondition, (prefix + message).getBytes()), is(false));
   }
 
   @Test
@@ -198,22 +304,22 @@ public class PrefixSha256FulfillmentTest extends AbstractCryptoConditionTest {
     final PrefixSha256Fulfillment fulfillment = TestFulfillmentFactory.constructPrefixSha256Fulfillment(PREFIX);
 
     assertThat(fulfillment.toString(),
-      is("PrefixSha256Fulfillment{"
-        + "prefix=" + ENCODED_PREFIX + ", "
-        + "maxMessageLength=1000, "
-        + "subfulfillment=PreimageSha256Fulfillment{"
-        + "encodedPreimage=Um9hZHM_IFdoZXJlIHdlJ3JlIGdvaW5nLCB3ZSBkb24ndCBuZWVkIHJvYWRzLg==, "
-        + "type=PREIMAGE-SHA-256, "
-        + "derivedCondition=PreimageSha256Condition{"
-        + "type=PREIMAGE-SHA-256, "
-        + "fingerprint=" + ENCODED_FINGERPRINT + ", "
-        + "cost=46}}, "
-        + "type=PREFIX-SHA-256, "
-        + "derivedCondition=PrefixSha256Condition{"
-        + "subtypes=[PREIMAGE-SHA-256], "
-        + "type=PREFIX-SHA-256, "
-        + "fingerprint=2ugoaAzCSomLbveq9nNmSJp5X-esBSjBw5IGFgvYF9w, "
-        + "cost=2107"
-        + "}}"));
+        is("PrefixSha256Fulfillment{"
+            + "prefix=" + ENCODED_PREFIX + ", "
+            + "maxMessageLength=1000, "
+            + "subfulfillment=PreimageSha256Fulfillment{"
+            + "encodedPreimage=Um9hZHM_IFdoZXJlIHdlJ3JlIGdvaW5nLCB3ZSBkb24ndCBuZWVkIHJvYWRzLg==, "
+            + "type=PREIMAGE-SHA-256, "
+            + "derivedCondition=PreimageSha256Condition{"
+            + "type=PREIMAGE-SHA-256, "
+            + "fingerprint=" + ENCODED_FINGERPRINT + ", "
+            + "cost=46}}, "
+            + "type=PREFIX-SHA-256, "
+            + "derivedCondition=PrefixSha256Condition{"
+            + "subtypes=[PREIMAGE-SHA-256], "
+            + "type=PREFIX-SHA-256, "
+            + "fingerprint=2ugoaAzCSomLbveq9nNmSJp5X-esBSjBw5IGFgvYF9w, "
+            + "cost=2107"
+            + "}}"));
   }
 }
