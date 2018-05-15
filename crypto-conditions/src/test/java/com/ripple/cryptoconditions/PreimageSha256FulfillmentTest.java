@@ -20,16 +20,22 @@ package com.ripple.cryptoconditions;
  * =========================LICENSE_END==================================
  */
 
+import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.MESSAGE;
+import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.constructEd25519Sha256Fulfillment;
 import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.constructPreimageFulfillment;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.ripple.cryptoconditions.helpers.TestConditionFactory;
+import com.ripple.cryptoconditions.helpers.TestKeyFactory;
 import org.junit.Test;
 
+import java.security.KeyPair;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.UUID;
@@ -106,6 +112,17 @@ public class PreimageSha256FulfillmentTest extends AbstractCryptoConditionTest {
     public final void testValidate() {
         final PreimageSha256Fulfillment actual = PreimageSha256Fulfillment.from(PREIMAGE.getBytes());
         assertTrue("Invalid condition", actual.verify(TEST_CONDITION, new byte[]{}));
+    }
+
+    /**
+     * Test to validate https://github.com/ripple/crypto-conditions/issues/19
+     */
+    @Test
+    public final void testValidateWithDifferentConditionType() {
+        final PreimageSha256Fulfillment actual = PreimageSha256Fulfillment.from(PREIMAGE.getBytes());
+        assertFalse("Invalid condition", actual.verify(
+            TestConditionFactory.constructPrefixSha256Condition("invalid"), new byte[]{})
+        );
     }
 
     @Test

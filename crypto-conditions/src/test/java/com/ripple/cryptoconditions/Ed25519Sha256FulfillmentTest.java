@@ -24,9 +24,11 @@ import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.MESSAGE
 import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.constructEd25519Sha256Fulfillment;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.ripple.cryptoconditions.helpers.TestConditionFactory;
 import com.ripple.cryptoconditions.helpers.TestKeyFactory;
 import net.i2p.crypto.eddsa.EdDSAEngine;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
@@ -141,10 +143,21 @@ public class Ed25519Sha256FulfillmentTest extends AbstractCryptoConditionTest {
     @Test
     public final void testValidate() {
         final KeyPair ed25519KeyPair = TestKeyFactory.generateRandomEd25519KeyPair();
-        final Ed25519Sha256Fulfillment actual
-            = constructEd25519Sha256Fulfillment(ed25519KeyPair);
+        final Ed25519Sha256Fulfillment actual = constructEd25519Sha256Fulfillment(ed25519KeyPair);
         assertTrue("Invalid condition",
             actual.verify(actual.getDerivedCondition(), MESSAGE.getBytes()));
+    }
+
+    /**
+     * Test to validate https://github.com/ripple/crypto-conditions/issues/19
+     */
+    @Test
+    public final void testValidateWithDifferentConditionType() {
+        final KeyPair ed25519KeyPair = TestKeyFactory.generateRandomEd25519KeyPair();
+        final Ed25519Sha256Fulfillment actual = constructEd25519Sha256Fulfillment(ed25519KeyPair);
+        assertFalse("Invalid condition", actual.verify(
+            TestConditionFactory.constructPreimageCondition("invalid"), MESSAGE.getBytes())
+        );
     }
 
     @Test

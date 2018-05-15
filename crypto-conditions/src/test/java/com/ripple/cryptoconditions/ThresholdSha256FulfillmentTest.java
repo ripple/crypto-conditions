@@ -23,16 +23,21 @@ package com.ripple.cryptoconditions;
 import static com.ripple.cryptoconditions.CryptoConditionType.THRESHOLD_SHA256;
 import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.MESSAGE;
 import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.PREIMAGE1;
+import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.constructRsaSha256Fulfillment;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
 
 import com.google.common.collect.Lists;
 import com.google.common.io.BaseEncoding;
 import com.ripple.cryptoconditions.der.DerEncodingException;
 import com.ripple.cryptoconditions.helpers.TestConditionFactory;
 import com.ripple.cryptoconditions.helpers.TestFulfillmentFactory;
+import com.ripple.cryptoconditions.helpers.TestKeyFactory;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+
+import java.security.KeyPair;
 
 /**
  * Unit tests for {@link ThresholdSha256Fulfillment}.
@@ -70,6 +75,16 @@ public class ThresholdSha256FulfillmentTest extends AbstractFactoryTest {
 
     this.runConcurrent(1, runnableTest);
     this.runConcurrent(runnableTest);
+  }
+
+  /**
+   * Test to validate https://github.com/ripple/crypto-conditions/issues/19
+   */
+  @Test
+  public final void testValidateWithDifferentConditionType() {
+    final ThresholdSha256Fulfillment actual = TestFulfillmentFactory.constructThresholdFulfillment();
+    assertFalse("Invalid condition",
+        actual.verify(TestConditionFactory.constructPreimageCondition("invalid"), new byte[]{}));
   }
 
   @Test

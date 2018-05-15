@@ -107,7 +107,7 @@ public interface RsaSha256Fulfillment extends Fulfillment<RsaSha256Condition> {
     private static final String SHA_256_WITH_RSA_PSS = "SHA256withRSA/PSS";
 
     @Override
-    public boolean verify(final RsaSha256Condition condition, final byte[] message) {
+    public boolean verify(final Condition condition, final byte[] message) {
       Objects.requireNonNull(condition,
           "Can't verify a RsaSha256Fulfillment against an null condition.");
       Objects.requireNonNull(message, "Message must not be null!");
