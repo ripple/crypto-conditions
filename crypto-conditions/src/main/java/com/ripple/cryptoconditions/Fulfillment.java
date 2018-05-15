@@ -9,9 +9,9 @@ package com.ripple.cryptoconditions;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -73,7 +73,7 @@ public interface Fulfillment<C extends Condition> {
    *
    * @see "https://tools.ietf.org/html/draft-thomas-crypto-conditions-04#section-5"
    */
-  boolean verify(C condition, byte[] message);
+  boolean verify(Condition condition, byte[] message);
 
   /**
    * <p>Validation of a fulfillment (F) against a condition (C) and an empty message (M). See
@@ -85,7 +85,7 @@ public interface Fulfillment<C extends Condition> {
    *
    * @see "https://tools.ietf.org/html/draft-thomas-crypto-conditions-04#section-5"
    */
-  default boolean verify(C condition) {
+  default boolean verify(Condition condition) {
     return verify(condition, "".getBytes());
   }
 }

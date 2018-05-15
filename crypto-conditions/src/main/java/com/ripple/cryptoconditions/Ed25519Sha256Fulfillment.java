@@ -109,7 +109,7 @@ public interface Ed25519Sha256Fulfillment extends Fulfillment<Ed25519Sha256Condi
   abstract class AbstractEd25519Sha256Fulfillment implements Ed25519Sha256Fulfillment {
 
     @Override
-    public boolean verify(final Ed25519Sha256Condition condition, final byte[] message) {
+    public boolean verify(final Condition condition, final byte[] message) {
       Objects.requireNonNull(condition, "Can't verify a Ed25519Sha256Fulfillment against an null condition.");
       Objects.requireNonNull(message, "Message must not be null!");
 

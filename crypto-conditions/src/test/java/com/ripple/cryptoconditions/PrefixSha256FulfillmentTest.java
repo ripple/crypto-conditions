@@ -26,8 +26,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.ripple.cryptoconditions.helpers.TestConditionFactory;
 import com.ripple.cryptoconditions.helpers.TestFulfillmentFactory;
 import com.ripple.cryptoconditions.helpers.TestKeyFactory;
 import net.i2p.crypto.eddsa.EdDSAEngine;
@@ -104,6 +106,20 @@ public class PrefixSha256FulfillmentTest extends AbstractCryptoConditionTest {
   public final void testValidateDerivedCondition() {
     final PrefixSha256Fulfillment actual = TestFulfillmentFactory.constructPrefixSha256Fulfillment(PREFIX);
     assertTrue("Invalid condition", actual.verify(actual.getDerivedCondition(), new byte[]{}));
+  }
+
+  /**
+   * Test to validate https://github.com/ripple/crypto-conditions/issues/19
+   */
+  @Test
+  public final void testValidateWithDifferentConditionType() {
+    final PrefixSha256Fulfillment narrowlyTypedActual = TestFulfillmentFactory.constructPrefixSha256Fulfillment(PREFIX);
+    assertFalse("Invalid condition",
+        narrowlyTypedActual.verify(TestConditionFactory.constructPreimageCondition("invalid"), new byte[]{}));
+
+    final Fulfillment actual = narrowlyTypedActual;
+    assertFalse("Invalid condition",
+        actual.verify(TestConditionFactory.constructPreimageCondition("invalid"), new byte[]{}));
   }
 
   /**

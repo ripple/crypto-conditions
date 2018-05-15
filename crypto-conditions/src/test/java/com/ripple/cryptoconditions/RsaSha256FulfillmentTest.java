@@ -9,9 +9,9 @@ package com.ripple.cryptoconditions;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,8 +24,10 @@ import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.MESSAGE
 import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.constructRsaSha256Fulfillment;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.ripple.cryptoconditions.helpers.TestConditionFactory;
 import com.ripple.cryptoconditions.helpers.TestKeyFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.hamcrest.CoreMatchers;
@@ -63,10 +65,9 @@ public class RsaSha256FulfillmentTest extends AbstractCryptoConditionTest {
   @Test
   public void testConstructionUsingMultipleThreads() throws Exception {
     final Runnable runnableTest = () -> {
-      final RsaSha256Fulfillment rsaSha256Fulfillment =
-          constructRsaSha256Fulfillment(
-              TestKeyFactory.generateRandomRsaKeyPair()
-          );
+      final RsaSha256Fulfillment rsaSha256Fulfillment = constructRsaSha256Fulfillment(
+          TestKeyFactory.generateRandomRsaKeyPair()
+      );
 
       assertThat(rsaSha256Fulfillment.getType(), is(CryptoConditionType.RSA_SHA256));
       assertThat(
@@ -87,16 +88,30 @@ public class RsaSha256FulfillmentTest extends AbstractCryptoConditionTest {
 
   @Test(expected = NullPointerException.class)
   public final void testFromWithNullSignature() {
-    RsaSha256Fulfillment
-        .from((RSAPublicKey) TestKeyFactory.generateRandomRsaKeyPair().getPublic(), null);
+    RsaSha256Fulfillment.from((RSAPublicKey) TestKeyFactory.generateRandomRsaKeyPair().getPublic(), null);
   }
 
   @Test
   public final void testValidate() {
     final KeyPair rsaKeyPair = TestKeyFactory.generateRandomRsaKeyPair();
-    final RsaSha256Fulfillment actual
-        = constructRsaSha256Fulfillment(rsaKeyPair);
+    final RsaSha256Fulfillment actual = constructRsaSha256Fulfillment(rsaKeyPair);
     assertTrue("Invalid condition", actual.verify(actual.getDerivedCondition(), MESSAGE.getBytes()));
+  }
+
+  /**
+   * Test to validate https://github.com/ripple/crypto-conditions/issues/19
+   */
+  @Test
+  public final void testValidateWithDifferentConditionType() {
+    final KeyPair rsaKeyPair = TestKeyFactory.generateRandomRsaKeyPair();
+
+    final RsaSha256Fulfillment narrowlyTypedActual = constructRsaSha256Fulfillment(rsaKeyPair);
+    assertFalse("Invalid condition",
+        narrowlyTypedActual.verify(TestConditionFactory.constructPreimageCondition("invalid"), new byte[]{}));
+
+    final Fulfillment actual = narrowlyTypedActual;
+    assertFalse("Invalid condition",
+        actual.verify(TestConditionFactory.constructPreimageCondition("invalid"), new byte[]{}));
   }
 
   @Test

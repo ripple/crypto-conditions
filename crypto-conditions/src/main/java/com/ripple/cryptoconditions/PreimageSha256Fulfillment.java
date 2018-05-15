@@ -99,7 +99,7 @@ public interface PreimageSha256Fulfillment extends Fulfillment<PreimageSha256Con
     }
 
     @Override
-    public final boolean verify(final PreimageSha256Condition condition, final byte[] message) {
+    public final boolean verify(final Condition condition, final byte[] message) {
       Objects.requireNonNull(condition,
           "Can't verify a PreimageSha256Fulfillment against an null condition.");
       Objects.requireNonNull(message, "Message must not be null!");

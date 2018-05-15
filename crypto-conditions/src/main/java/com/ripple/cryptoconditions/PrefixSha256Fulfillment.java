@@ -104,7 +104,7 @@ public interface PrefixSha256Fulfillment extends Fulfillment<PrefixSha256Conditi
   abstract class AbstractPrefixSha256Fulfillment implements PrefixSha256Fulfillment {
 
     @Override
-    public boolean verify(final PrefixSha256Condition condition, final byte[] message) {
+    public boolean verify(final Condition condition, final byte[] message) {
       Objects.requireNonNull(condition, "Can't verify a PrefixSha256Fulfillment against a null condition!");
       Objects.requireNonNull(message, "Message must not be null!");
 
