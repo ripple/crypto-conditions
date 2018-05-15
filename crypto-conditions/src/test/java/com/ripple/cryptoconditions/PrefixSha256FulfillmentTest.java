@@ -113,7 +113,11 @@ public class PrefixSha256FulfillmentTest extends AbstractCryptoConditionTest {
    */
   @Test
   public final void testValidateWithDifferentConditionType() {
-    final PrefixSha256Fulfillment actual = TestFulfillmentFactory.constructPrefixSha256Fulfillment(PREFIX);
+    final PrefixSha256Fulfillment narrowlyTypedActual = TestFulfillmentFactory.constructPrefixSha256Fulfillment(PREFIX);
+    assertFalse("Invalid condition",
+        narrowlyTypedActual.verify(TestConditionFactory.constructPreimageCondition("invalid"), new byte[]{}));
+
+    final Fulfillment actual = narrowlyTypedActual;
     assertFalse("Invalid condition",
         actual.verify(TestConditionFactory.constructPreimageCondition("invalid"), new byte[]{}));
   }

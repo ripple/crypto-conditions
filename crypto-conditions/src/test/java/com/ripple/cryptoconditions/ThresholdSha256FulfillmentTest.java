@@ -9,9 +9,9 @@ package com.ripple.cryptoconditions;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,6 @@ package com.ripple.cryptoconditions;
 import static com.ripple.cryptoconditions.CryptoConditionType.THRESHOLD_SHA256;
 import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.MESSAGE;
 import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.PREIMAGE1;
-import static com.ripple.cryptoconditions.helpers.TestFulfillmentFactory.constructRsaSha256Fulfillment;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
@@ -33,11 +32,8 @@ import com.google.common.io.BaseEncoding;
 import com.ripple.cryptoconditions.der.DerEncodingException;
 import com.ripple.cryptoconditions.helpers.TestConditionFactory;
 import com.ripple.cryptoconditions.helpers.TestFulfillmentFactory;
-import com.ripple.cryptoconditions.helpers.TestKeyFactory;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
-
-import java.security.KeyPair;
 
 /**
  * Unit tests for {@link ThresholdSha256Fulfillment}.
@@ -82,7 +78,12 @@ public class ThresholdSha256FulfillmentTest extends AbstractFactoryTest {
    */
   @Test
   public final void testValidateWithDifferentConditionType() {
-    final ThresholdSha256Fulfillment actual = TestFulfillmentFactory.constructThresholdFulfillment();
+
+    final ThresholdSha256Fulfillment narrowlyTypedActual = TestFulfillmentFactory.constructThresholdFulfillment();
+    assertFalse("Invalid condition",
+        narrowlyTypedActual.verify(TestConditionFactory.constructPreimageCondition("invalid"), new byte[]{}));
+
+    final Fulfillment actual = narrowlyTypedActual;
     assertFalse("Invalid condition",
         actual.verify(TestConditionFactory.constructPreimageCondition("invalid"), new byte[]{}));
   }

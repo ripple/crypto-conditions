@@ -104,7 +104,12 @@ public class RsaSha256FulfillmentTest extends AbstractCryptoConditionTest {
   @Test
   public final void testValidateWithDifferentConditionType() {
     final KeyPair rsaKeyPair = TestKeyFactory.generateRandomRsaKeyPair();
-    final RsaSha256Fulfillment actual = constructRsaSha256Fulfillment(rsaKeyPair);
+
+    final RsaSha256Fulfillment narrowlyTypedActual = constructRsaSha256Fulfillment(rsaKeyPair);
+    assertFalse("Invalid condition",
+        narrowlyTypedActual.verify(TestConditionFactory.constructPreimageCondition("invalid"), new byte[]{}));
+
+    final Fulfillment actual = narrowlyTypedActual;
     assertFalse("Invalid condition",
         actual.verify(TestConditionFactory.constructPreimageCondition("invalid"), new byte[]{}));
   }
