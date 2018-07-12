@@ -13,7 +13,7 @@ However, to configure this module on its own, add the following maven coordinate
 <dependency>
   <groupId>org.interledger.quilt.jackson</groupId>
   <artifactId>jackson-datatype-cryptoconditions</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>1.0.3</version>
 </dependency>
 ```
 
