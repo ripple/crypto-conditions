@@ -385,6 +385,7 @@
           <version>2.20</version>
           <configuration>
             <argLine>@{argLine}</argLine>
+            <useSystemClassLoader>false</useSystemClassLoader>
           </configuration>
         </plugin>
       </plugins>
