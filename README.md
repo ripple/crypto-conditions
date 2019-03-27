@@ -1,5 +1,5 @@
-# Crypto-Conditions [![join the chat][rocketchat-image]][rocketchat-url]
-[![circle-ci][circle-image]][circle-url] [![codecov][codecov-image]][codecov-url] [![issues][github-issues-image]][github-issues-url]
+# Crypto-Conditions
+[![circle-ci][circle-image]][circle-url] [![codecov][codecov-image]][codecov-url] [![codacy][codacy-image]][codacy-url] [![issues][github-issues-image]][github-issues-url]
 
 [rocketchat-url]: https://chat.hyperledger.org/channel/quilt
 [rocketchat-image]: https://open.rocket.chat/images/join-chat.svg
@@ -7,6 +7,8 @@
 [circle-url]: https://circleci.com/gh/ripple/crypto-conditions
 [codecov-image]: https://codecov.io/gh/ripple/crypto-conditions/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/ripple/crypto-conditions
+[codacy-image]: https://api.codacy.com/project/badge/Grade/49e43210600d462f861e1813230d855d
+[codacy-url]: https://www.codacy.com/app/sappenin/java-ilpv4-connector?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sappenin/java-ilpv4-connector&amp;utm_campaign=Badge_Grade
 [twitter-image]: https://img.shields.io/twitter/follow/interledger.svg?style=social
 [twitter-url]: https://twitter.com/intent/follow?screen_name=interledger
 [github-issues-image]: https://img.shields.io/github/issues/ripple/crypto-conditions.svg
