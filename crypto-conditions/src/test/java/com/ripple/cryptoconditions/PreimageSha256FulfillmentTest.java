@@ -87,13 +87,13 @@ public class PreimageSha256FulfillmentTest extends AbstractCryptoConditionTest {
    */
   @Test
   public final void testSmallToLargePreimage() {
-    for (int PREIMAGE_LENGTH = 0; PREIMAGE_LENGTH < 100; PREIMAGE_LENGTH++) {
-      // Fill the array with PREIMAGE_LENGTH bytes...
-      final byte[] preimageBytes = new byte[PREIMAGE_LENGTH];
+    for (int preimageLength = 0; preimageLength < 100; preimageLength++) {
+      // Fill the array with preimageLength bytes...
+      final byte[] preimageBytes = new byte[preimageLength];
       new SecureRandom().nextBytes(preimageBytes);
 
       final PreimageSha256Fulfillment fulfillment = PreimageSha256Fulfillment.from(preimageBytes);
-      assertThat(fulfillment.getDerivedCondition().getCost(), is(Long.valueOf(PREIMAGE_LENGTH)));
+      assertThat(fulfillment.getDerivedCondition().getCost(), is(Long.valueOf(preimageLength)));
       assertTrue("Invalid condition", fulfillment.verify(fulfillment.getDerivedCondition(), new byte[]{}));
     }
   }
@@ -120,8 +120,7 @@ public class PreimageSha256FulfillmentTest extends AbstractCryptoConditionTest {
         TestConditionFactory.constructPrefixSha256Condition("invalid"), new byte[]{})
     );
 
-    final Fulfillment actual = narrowlyTypedActual;
-    assertFalse("Invalid condition", actual.verify(
+    assertFalse("Invalid condition", narrowlyTypedActual.verify(
         TestConditionFactory.constructPrefixSha256Condition("invalid"), new byte[]{})
     );
   }

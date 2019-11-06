@@ -60,14 +60,14 @@ public class TestFulfillmentFactory {
    */
   public static PrefixSha256Fulfillment constructPrefixSha256Fulfillment(final String prefix) {
     return PrefixSha256Fulfillment
-      .from(prefix.getBytes(), 1000, constructPreimageFulfillment(PREIMAGE1));
+        .from(prefix.getBytes(), 1000, constructPreimageFulfillment(PREIMAGE1));
   }
 
   /**
    * Helper to construct a {@link RsaSha256Fulfillment} with a known public key.
    */
   public static RsaSha256Fulfillment constructRsaSha256Fulfillment(
-    final KeyPair rsaKeyPair
+      final KeyPair rsaKeyPair
   ) {
     try {
       final Signature rsaSigner = Signature.getInstance("SHA256withRSA/PSS");
@@ -85,8 +85,8 @@ public class TestFulfillmentFactory {
    * corresponding private key.
    */
   public static RsaSha256Fulfillment constructRsaSha256Fulfillment(
-    final RSAPublicKey rsaPublicKey,
-    final byte[] signature
+      final RSAPublicKey rsaPublicKey,
+      final byte[] signature
   ) {
     return RsaSha256Fulfillment.from(rsaPublicKey, signature);
   }
@@ -103,8 +103,8 @@ public class TestFulfillmentFactory {
       byte[] edDsaSignature = edDsaSigner.sign();
 
       return constructEd25519Sha256Fulfillment(
-        (EdDSAPublicKey) ed25519KeyPair.getPublic(),
-        edDsaSignature
+          (EdDSAPublicKey) ed25519KeyPair.getPublic(),
+          edDsaSignature
       );
     } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
       throw new RuntimeException(e);
@@ -116,7 +116,7 @@ public class TestFulfillmentFactory {
    * corresponding private key.
    */
   public static Ed25519Sha256Fulfillment constructEd25519Sha256Fulfillment(
-    final EdDSAPublicKey edDsaPublicKey, final byte[] signature
+      final EdDSAPublicKey edDsaPublicKey, final byte[] signature
   ) {
     return Ed25519Sha256Fulfillment.from(edDsaPublicKey, signature);
   }
@@ -126,12 +126,12 @@ public class TestFulfillmentFactory {
    */
   public static ThresholdSha256Fulfillment constructThresholdFulfillment() {
     return ThresholdSha256Fulfillment.from(
-      Lists.newArrayList(TestConditionFactory
-        .constructRsaSha256Condition(TestKeyFactory.constructRsaPublicKey(RSA_MODULUS))),
-      Lists.newArrayList(
-        TestFulfillmentFactory.constructPreimageFulfillment(PREIMAGE1),
-        TestFulfillmentFactory.constructPrefixSha256Fulfillment(PREFIX1)
-      )
+        Lists.newArrayList(TestConditionFactory
+            .constructRsaSha256Condition(TestKeyFactory.constructRsaPublicKey(RSA_MODULUS))),
+        Lists.newArrayList(
+            TestFulfillmentFactory.constructPreimageFulfillment(PREIMAGE1),
+            TestFulfillmentFactory.constructPrefixSha256Fulfillment(PREFIX1)
+        )
     );
   }
 }

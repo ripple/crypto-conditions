@@ -9,9 +9,9 @@ package com.ripple.cryptoconditions;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -147,7 +147,7 @@ public class ThresholdFactoryTest extends AbstractFactoryTest {
   }
 
   @Test(expected = NullPointerException.class)
-  public void mOfNWithNullSubConditionsList() {
+  public void mkeysOfnWithNullSubConditionsList() {
     try {
       ThresholdFactory.constructMOfNCondition(1, 2, null);
     } catch (NullPointerException e) {
@@ -157,7 +157,7 @@ public class ThresholdFactoryTest extends AbstractFactoryTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void mOfNWithNegativeThreshold() {
+  public void mkeysOfnWithNegativeThreshold() {
     try {
       ThresholdFactory
           .constructMOfNCondition(-1, 2, Lists.newArrayList(subcondition1, subcondition2));
@@ -168,7 +168,7 @@ public class ThresholdFactoryTest extends AbstractFactoryTest {
   }
 
   @Test
-  public void mOfNWithZeroThreshold() {
+  public void mkeysOfnWithZeroThreshold() {
     // Create a control threshold fulfillment that has no fulfillments (0) to satisfy the
     // threshold of a 0-of-3 condition.
     final ThresholdSha256Fulfillment thresholdFulfillment = ThresholdSha256Fulfillment.from(
@@ -183,7 +183,7 @@ public class ThresholdFactoryTest extends AbstractFactoryTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void mOfNWithIncorrectNumSubConditions() {
+  public void mkeysOfnWithIncorrectNumSubConditions() {
     try {
       ThresholdFactory.constructMOfNCondition(0, 2, Lists.newArrayList(subcondition1));
     } catch (IllegalArgumentException e) {
@@ -196,7 +196,7 @@ public class ThresholdFactoryTest extends AbstractFactoryTest {
    * Test {@link ThresholdFactory#constructMOfNCondition(int, int, List)}.
    */
   @Test
-  public void mOfNConditionTest() {
+  public void mkeysOfnConditionTest() {
 
     // Create a control threshold fulfillment that has enough fulfillments (3) to satisfy the
     // threshold of a 3-of-5 condition.
@@ -420,7 +420,7 @@ public class ThresholdFactoryTest extends AbstractFactoryTest {
   }
 
   @Test(expected = NullPointerException.class)
-  public void mOfNFulfillmentWithFirstNull() {
+  public void mkeysOfnFulfillmentWithFirstNull() {
     try {
       ThresholdFactory.constructMOfNFulfillment(1, 2, null, Lists.newArrayList());
     } catch (NullPointerException e) {
@@ -430,7 +430,7 @@ public class ThresholdFactoryTest extends AbstractFactoryTest {
   }
 
   @Test(expected = NullPointerException.class)
-  public void mOfNFulfillmentWithSecondNull() {
+  public void mkeysOfnFulfillmentWithSecondNull() {
     try {
       ThresholdFactory.constructMOfNFulfillment(1, 2, Lists.newArrayList(), null);
     } catch (NullPointerException e) {
@@ -440,7 +440,7 @@ public class ThresholdFactoryTest extends AbstractFactoryTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void mOfNFulfillmenttsWithNegativeThreshold() {
+  public void mkeysOfnFulfillmenttsWithNegativeThreshold() {
     try {
       ThresholdFactory.constructMOfNFulfillment(-1, 2, Lists.newArrayList(),
           Lists.newArrayList(subfulfillment1, subfulfillment2));
@@ -451,7 +451,7 @@ public class ThresholdFactoryTest extends AbstractFactoryTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void mOfNFulfillmentWithIncorrectTotalN() {
+  public void mkeysOfnFulfillmentWithIncorrectTotalN() {
     try {
       ThresholdFactory.constructMOfNFulfillment(1, 2,
           Lists.newArrayList(),
@@ -469,7 +469,7 @@ public class ThresholdFactoryTest extends AbstractFactoryTest {
    * pair.
    */
   @Test
-  public void mOfNFulfillmentForOneOfTwo() {
+  public void mkeysOfnFulfillmentForOneOfTwo() {
 
     // The condition to fulfill...
     final ThresholdSha256Condition thresholdCondition = ThresholdSha256Condition.from(
