@@ -9,9 +9,9 @@ package com.ripple.cryptoconditions.jackson;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,19 +20,18 @@ package com.ripple.cryptoconditions.jackson;
  * =========================LICENSE_END==================================
  */
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static com.ripple.cryptoconditions.jackson.Encoding.BASE64;
 import static com.ripple.cryptoconditions.jackson.Encoding.BASE64URL;
 import static com.ripple.cryptoconditions.jackson.Encoding.BASE64URL_WITHOUT_PADDING;
 import static com.ripple.cryptoconditions.jackson.Encoding.BASE64_WITHOUT_PADDING;
 import static com.ripple.cryptoconditions.jackson.Encoding.HEX;
-
-import com.ripple.cryptoconditions.PreimageSha256Condition;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ripple.cryptoconditions.PreimageSha256Condition;
 import org.immutables.value.Value;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,6 +76,7 @@ public class PreimageSha256ConditionCryptoConditionModuleTest extends
 
   /**
    * Get test parameters.
+   *
    * @return the parameters for the tests
    */
   @Parameters

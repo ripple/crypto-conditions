@@ -96,9 +96,6 @@
     <jacoco.propertyName>argLine</jacoco.propertyName>
 
     <checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
-    <checkstyle.output.file>
-      ${project.build.directory}/checkstyle-reports/checkstyle-result.xml
-    </checkstyle.output.file>
     <checkstyle.violationSeverity>warning</checkstyle.violationSeverity>
 
     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
@@ -339,7 +336,13 @@
         </plugin>
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.1.0</version>
+          <configuration>
+            <excludes>
+              <exclude>.*\/generated.*sources\/.*</exclude>
+            </excludes>
+            <source>8</source>
+          </configuration>
           <executions>
             <execution>
               <id>attach-javadocs</id>
@@ -355,14 +358,15 @@
           <version>3.1.0</version>
           <inherited>true</inherited>
           <configuration>
+            <sourceDirectories>
+              <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+              <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
+            </sourceDirectories>
+            <excludes>.*\/generated.*sources\/.*</excludes>
             <encoding>UTF-8</encoding>
             <consoleOutput>true</consoleOutput>
             <linkXRef>false</linkXRef>
-            <excludes>**/generated-sources/**/*,**/generated-test-sources/**/*</excludes>
-            <sourceDirectories>
-              <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-            </sourceDirectories>
-            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+            <failOnViolation>true</failOnViolation>
           </configuration>
           <dependencies>
             <!-- Update Checkstyle version used -->
@@ -374,6 +378,7 @@
           </dependencies>
           <executions>
             <execution>
+              <phase>test</phase>
               <goals>
                 <goal>check</goal>
               </goals>
@@ -479,6 +484,16 @@
       </plugin>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <sourceDirectories>
+            <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+            <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
+          </sourceDirectories>
+          <excludes>.*\/generated.*sources\/.*</excludes>
+          <encoding>UTF-8</encoding>
+          <consoleOutput>true</consoleOutput>
+          <linkXRef>false</linkXRef>
+        </configuration>
         <reportSets>
           <reportSet>
             <reports>
@@ -489,6 +504,11 @@
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>.*\/generated.*sources\/.*</exclude>
+          </excludes>
+        </configuration>
       </plugin>
     </plugins>
   </reporting>
