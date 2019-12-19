@@ -5,7 +5,7 @@
   <groupId>com.ripple.cryptoconditions</groupId>
   <artifactId>crypto-conditions-parent</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.4-SNAPSHOT</version>
+  <version>1.0.4</version>
 
   <name>Ripple Crypto Conditions Parent</name>
   <description>Parent project for Java Crypto Conditions modules.</description>
