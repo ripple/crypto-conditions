@@ -24,7 +24,6 @@ import com.ripple.cryptoconditions.der.DerEncodingException;
 import com.ripple.cryptoconditions.der.DerInputStream;
 import com.ripple.cryptoconditions.der.DerTag;
 import com.ripple.cryptoconditions.utils.UnsignedBigInteger;
-
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;

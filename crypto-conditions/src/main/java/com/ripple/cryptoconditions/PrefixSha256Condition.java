@@ -24,7 +24,6 @@ import com.ripple.cryptoconditions.der.DerEncodingException;
 import com.ripple.cryptoconditions.der.DerOutputStream;
 import com.ripple.cryptoconditions.der.DerTag;
 import com.ripple.cryptoconditions.utils.HashUtils;
-
 import org.immutables.value.Value;
 
 import java.io.ByteArrayOutputStream;
