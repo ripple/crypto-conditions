@@ -100,7 +100,7 @@
 
     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
 
-    <jackson.version>[2.9.10.1,3.0.0-SNAPSHOT)</jackson.version>
+    <jackson.version>[2.9.10.1,)</jackson.version>
   </properties>
 
   <modules>
