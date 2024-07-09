@@ -20,14 +20,18 @@ package com.ripple.cryptoconditions;
  * =========================LICENSE_END==================================
  */
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 import com.google.common.collect.Lists;
+import com.ripple.cryptoconditions.der.DerEncodingException;
 import com.ripple.cryptoconditions.helpers.TestKeyFactory;
 import net.i2p.crypto.eddsa.EdDSAEngine;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.encoders.Hex;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -136,6 +140,33 @@ public class CryptoConditionReaderWriterTest {
     final Condition readAndWrittenCondition = CryptoConditionReader
         .readCondition(CryptoConditionWriter.writeCondition(ed25519Condition));
     assertThat(readAndWrittenCondition, is(ed25519Condition));
+  }
+
+  @Test
+  public void testDeserializeLengthOverflow() throws Exception {
+    String conditionHexDer = "A406800161810100";
+    byte [] conditionBytes = Hex.decode(conditionHexDer);
+    Condition readCondition =
+        CryptoConditionReader.readCondition(conditionBytes);
+    assertThat(readCondition.getFingerprintBase64Url(), is("YQ"));
+
+    // Replace object length (fourth byte 01) with 84 7FFFFFFF
+    // 84 is DER encoding for length of length
+    // 7FFFFFFF is Integer.MAX_INT
+    // Unchecked, this would cause OutOfMemoryError: Requested array size exceeds VM limit
+    String overflowConditionHexDer =
+        conditionHexDer.substring(0, 6) + "847FFFFFFF" + conditionHexDer.substring(8);
+
+    byte [] overflowConditionBytes = Hex.decode(overflowConditionHexDer);
+
+    try {
+      CryptoConditionReader.readCondition(overflowConditionBytes);
+      fail("DerEncodingException expected");
+    } catch (DerEncodingException encodingException) {
+      // expect
+      assertThat(encodingException.getMessage(),
+          containsString(Integer.MAX_VALUE + "] is larger than allowed"));
+    }
   }
 
   @Test
