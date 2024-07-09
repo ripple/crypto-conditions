@@ -103,7 +103,7 @@ public class DerInputStream extends FilterInputStream {
     DerObject obj = new DerObject();
     obj.setTag(readTag(innerBytesRead));
     obj.setLength(readLength(innerBytesRead));
-    if (innerBytesRead.get() + obj.getLength() > limit) {
+    if ((long) innerBytesRead.get() + obj.getLength() > limit) {
       throw new DerEncodingException(
           "Object length [" + obj.getLength() + "] is larger than allowed.");
     }
