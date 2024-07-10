@@ -54,7 +54,7 @@ Next, add the following Maven dependency:
   <dependency>
     <groupId>com.ripple.cryptoconditions</groupId>
     <artifactId>crypto-conditions</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </dependency>
   ...
 </dependencies>
@@ -75,7 +75,7 @@ Next, import this library as a dependency, like this:
 ```
 dependencies {
     ...
-    compile group: 'com.ripple.cryptoconditions', name: 'crypto-conditions', version: '1.0.4'
+    compile group: 'com.ripple.cryptoconditions', name: 'crypto-conditions', version: '1.0.5'
     ...
 }
 ```
