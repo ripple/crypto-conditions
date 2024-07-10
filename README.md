@@ -32,21 +32,8 @@ EdDSA keys, the library is included as a dependancy. Future versions will hopefu
 ## Get it!
 
 ### Maven
-This library is contained in the Java package `org.interledger.cryptoconditions`, and can be included in your project
-by first adding a Snapshot Repository, like this:
-
-```
-<repositories>
-    ...
-    <repository>
-        <id>sonatype</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </repository>
-    ...
-</repositories>
-```
-
-Next, add the following Maven dependency:
+This library is contained in the Java package `org.interledger.cryptoconditions`, and can be included in your Maven 
+project by adding the following dependency:
 
 ```
 <dependencies>
@@ -60,17 +47,7 @@ Next, add the following Maven dependency:
 </dependencies>
 ```
 ### Gradle
-To import this library into a project that uses gradle, first add the Snapshot Repository to your `gradle.properties` file, like this:
-
-```
-repositories {
-    mavenCentral()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots/"
-    }
-}
-```
-Next, import this library as a dependency, like this:
+This library can included in your Gradle project by adding the following dependency: 
 
 ```
 dependencies {
@@ -85,7 +62,6 @@ dependencies {
 ### Requirements
 This project uses Maven to manage dependencies and other aspects of the build.
 To install Maven, follow the instructions at [https://maven.apache.org/install.html](https://maven.apache.org/install.html).
-
 
 ### Get the code
 
