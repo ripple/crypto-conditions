@@ -342,6 +342,7 @@
               <exclude>.*\/generated.*sources\/.*</exclude>
             </excludes>
             <source>8</source>
+            <additionalOptions>-Xdoclint:none</additionalOptions>
           </configuration>
           <executions>
             <execution>
