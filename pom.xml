@@ -100,7 +100,7 @@
 
     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
 
-    <jackson.version>[2.9.10.1,)</jackson.version>
+    <jackson.version>2.19.1</jackson.version>
   </properties>
 
   <modules>
@@ -133,19 +133,11 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-annotations</artifactId>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
         <version>${jackson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>${jackson.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
@@ -388,7 +380,7 @@
         </plugin>
         <plugin>
           <groupId>org.jacoco</groupId>
-          <version>0.8.4</version>
+          <version>0.8.13</version>
           <artifactId>jacoco-maven-plugin</artifactId>
           <executions>
             <execution>
